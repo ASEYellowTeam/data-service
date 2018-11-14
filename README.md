@@ -1,5 +1,8 @@
 # data-service microservice
-Manage the database
+_Manage the database_
+
+[![Build Status](https://travis-ci.org/ASEYellowTeam/data-service.svg?branch=master)](https://travis-ci.org/ASEYellowTeam/data-service)
+[![Coverage Status](https://coveralls.io/repos/github/ASEYellowTeam/data-service/badge.svg?branch=master)](https://coveralls.io/github/ASEYellowTeam/data-service?branch=master)
 
 ## Install
 - `pip install -r requirements.txt`
