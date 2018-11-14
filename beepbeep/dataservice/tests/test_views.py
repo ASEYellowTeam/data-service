@@ -1,7 +1,7 @@
 import os
 import unittest
 import jwt
-from dataservice.app import app
+from beepbeep.dataservice.app import create_app
 from flask_webtest import TestApp as _TestApp
 
 
@@ -20,7 +20,7 @@ _TOKEN = {'iss': 'beepbeep',
 
 class TestViews(unittest.TestCase):
     def setUp(self):
-        self.app = _TestApp(app)
+        self.app = _TestApp(create_app())
         self.token = create_token(_TOKEN).decode('ascii')
         self.headers = {'Authorization': 'Bearer ' + self.token}
 

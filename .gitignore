@@ -118,3 +118,8 @@ docs/build
 
 # ENVIRONMENTS VARIABLES
 .variable.sh
+
+# Personal scripts
+venv.sh
+variables.sh
+..coverage.swp
