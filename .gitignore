@@ -115,3 +115,6 @@ docs/build
 
 # VSCode
 .vscode
+
+# ENVIRONMENTS VARIABLES
+.variable.sh
