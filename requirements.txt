@@ -1,5 +1,5 @@
 pyjwt
--e git+https://github.com/beepbeep/flakon.git#egg=flakon
+-e git+https://github.com/Runnerly/flakon.git#egg=flakon
 flask_webtest
 cryptography
 sqlalchemy
