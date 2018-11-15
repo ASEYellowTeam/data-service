@@ -9,13 +9,13 @@ _Manage the database_ • [data-service.yellowteam.ml](http://data-service.yello
 - `python setup.py develop`
 
 
-## Run the app
+## Run the microservice
 `python beepbeep/dataservice/run.py`
 
 **Important note:** use python 3.6.
 
 
-## Using Docker
+## Docker
 [![Image size](https://images.microbadger.com/badges/image/ytbeepbeep/data-service.svg)](https://microbadger.com/images/ytbeepbeep/data-service)
 [![Latest version](https://images.microbadger.com/badges/version/ytbeepbeep/data-service.svg)](https://microbadger.com/images/ytbeepbeep/data-service)
 
