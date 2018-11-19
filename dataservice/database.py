@@ -15,17 +15,14 @@ class User(db.Model):
     email = db.Column(db.Unicode(128), nullable=False)
     firstname = db.Column(db.Unicode(128))
     lastname = db.Column(db.Unicode(128))
-    #password = db.Column(db.Unicode(128))
     strava_token = db.Column(db.String(128))
     age = db.Column(db.Integer)
     weight = db.Column(db.Numeric(4, 1))
     max_hr = db.Column(db.Integer)
     rest_hr = db.Column(db.Integer)
     vo2max = db.Column(db.Numeric(4, 2))
-    is_active = db.Column(db.Boolean, default=True)
-    is_anonymous = False
 
-    def to_json(self, secure=False):
+    def to_json(self):
         res = {}
         for attr in ('id', 'email', 'firstname', 'lastname', 'age', 'weight',
                      'max_hr', 'rest_hr', 'vo2max'):
@@ -33,8 +30,6 @@ class User(db.Model):
             if isinstance(value, Decimal):
                 value = float(value)
             res[attr] = value
-        if secure:
-            res['strava_token'] = self.strava_token
         return res
 
     def get_id(self):
@@ -97,38 +92,3 @@ class Objective(db.Model):
                 value = value.timestamp()
             res[attr] = value
         return res
-
-
-class Report(db.Model):
-    __tablename__ = 'report'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    runner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    runner = relationship('User', foreign_keys='Report.runner_id')
-    timestamp = db.Column(db.Float)
-    choice_time = db.Column(db.Float)
-
-    def to_json(self):
-        res = {}
-        for attr in ('id', 'runner_id', 'timestamp', 'choice_time'):
-            value = getattr(self, attr)
-            res[attr] = value
-        return res
-
-
-def init_database():
-    exists = db.session.query(User).filter(User.email == 'example@example.com')
-    if exists.all() != []:
-        return
-
-    user = User()
-    user.email = 'example@example.com'
-    user.firstname = 'Admin'
-    user.lastname = 'Admin'
-    user.age = 42
-    user.weight = 60
-    user.max_hr = 180
-    user.rest_hr = 50
-    user.vo2max = 63
-    user.strava_token = os.environ.get('STRAVA_TOKEN')
-    db.session.add(user)
-    db.session.commit()
