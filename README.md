@@ -10,7 +10,7 @@ _Manage the database_
 
 
 ## Run the microservice
-`python beepbeep/dataservice/run.py`
+`python dataservice/app.py`
 
 **Important note:** use python 3.6.
 

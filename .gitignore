@@ -119,6 +119,9 @@ docs/build
 # ENVIRONMENTS VARIABLES
 .variable.sh
 
+# MIX
+data-service.db
+
 # Personal scripts
 venv.sh
 variables.sh

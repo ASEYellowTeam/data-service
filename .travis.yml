@@ -18,7 +18,7 @@ install:
 - python setup.py develop
 
 script:
-- pytest --cov-config .coveragerc --cov beepbeep beepbeep/dataservice/tests
+- pytest --cov-config .coveragerc --cov dataservice dataservice/tests
 - docker build --pull --cache-from "$IMAGE_NAME" --tag "$IMAGE_NAME" .
 
 after_success:

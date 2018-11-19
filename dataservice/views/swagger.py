@@ -3,7 +3,7 @@ from datetime import datetime
 
 from flakon import SwaggerBlueprint
 from flask import request, jsonify
-from beepbeep.dataservice.database import db, User, Run
+from dataservice.database import db, User, Run
 import json
 from json import loads
 
@@ -25,7 +25,7 @@ def add_runs():
             db_run.start_date = datetime.fromtimestamp(run['start_date'])
             db_run.elapsed_time = run['elapsed_time']
             db_run.average_speed = run['average_speed']
-            db_run.average_heartrate = run['average_heartrate'] 
+            db_run.average_heartrate = run['average_heartrate']
             db_run.total_elevation_gain = run['total_elevation_gain']
             db_run.runner_id = runner_id
             db_run.title = run['title']
