@@ -1,52 +1,120 @@
 swagger: "2.0"
 info:
-  title: beepbeep Data Service
-  description: returns info about beepbeep
-  license:
-    name: APLv2
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.1.0
+	title: beepbeep Data Service
+	description: returns info about beepbeep
+	license:
+		name: APLv2
+		url: https://www.apache.org/licenses/LICENSE-2.0.html
+	version: 0.1.0
 basePath: /api
 paths:
-    /runs/{runner_id}:
-      get:
-       operationId: getRuns
-       description: Get Runs
-       produces:
-       - application/json
-       parameters:
-          - name: runner_id
-            in: path
-            description: ID of Runner
-            required: true
-            type: integer
-       responses:
-          '200':
-            description: List of runs
-    /add_runs:
-      post:
-        operationId: addRuns
-        description: Adds runs
-        produces:
-        - application/json
-        responses:
-          '200':
-            description: List of runs ids
-            schema:
-                type: array
-                items:
-                    type: integer
-    /users:
-      get:
-        operationId: getUsers
-        description: Returns a list of users
-        produces:
-        - application/json
-        responses:
-          '200':
-            description: List of Ids
-            schema:
-                type: array
-                items:
-                    type: integer
-
+		/runs/{runner_id}:
+			get:
+			 operationId: getRuns
+			 description: Get Runs
+			 produces:
+			 - application/json
+			 parameters:
+					- name: runner_id
+						in: path
+						description: ID of Runner
+						required: true
+						type: integer
+			 responses:
+					'200':
+						description: List of runs
+		/runs:
+			post:
+				operationId: addRuns
+				description: Adds runs
+				produces:
+				- application/json
+				responses:
+					'200':
+						description: List of runs ids
+						schema:
+								type: array
+								items:
+										type: integer
+		/users:
+			get:
+				operationId: getUsers
+				description: Returns a list of users
+				produces:
+				- application/json
+				responses:
+					'200':
+						description: List of Ids
+						schema:
+								type: array
+								items:
+										type: integer
+		/users:
+			post:
+				operationId: addUser
+				description: Adds a new user
+				produces:
+				- application/json
+				parameters:
+					- name: email
+						in: path
+						description: user email
+						required: true
+						type: string
+					- name: firstname
+						in: path
+						description: first name
+						required: true
+						type: string
+					- name: lastname
+						in: path
+						description: user last name
+						required: true
+						type: string
+					- name: strava_token
+						in: path
+						description: user strava token
+						required: true
+						type: string
+					- name: age
+						in: path
+						description: user age
+						required: false
+						type: integer
+					- name: weight
+						in: path
+						description: user weight
+						required: false
+						type: integer
+					- name: max_hr
+						in: path
+						description: max heart rate
+						required: false
+						type: float
+					- name: rest_hr
+						in: path
+						description: heart rate at rest
+						required: false
+						type: float
+					- name: vo2max
+						in: path
+						description: max volume of oxygen
+						required: false
+						type: float
+				responses:
+					'200':
+						description: new user id
+						schema:
+							type: integer
+							
+		/users/{user_id}:
+			get:
+				operationId: getUser
+				description: Returns a single user
+				produces:
+				- application/json
+				responses:
+					'200':
+						description: User Id
+						schema:
+							type: integer
