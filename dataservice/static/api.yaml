@@ -8,96 +8,62 @@ info:
 	version: 0.1.0
 basePath: /api
 paths:
-		/runs/{runner_id}:
-			get:
-			 operationId: getRuns
-			 description: Get Runs
-			 produces:
-			 - application/json
-			 parameters:
-					- name: runner_id
-						in: path
-						description: ID of Runner
-						required: true
-						type: integer
-			 responses:
-					'200':
-						description: List of runs
-		/runs:
-			post:
-				operationId: addRuns
-				description: Adds runs
-				produces:
-				- application/json
-				responses:
-					'200':
-						description: List of runs ids
-						schema:
-								type: array
-								items:
-										type: integer
 		/users:
 			get:
 				operationId: getUsers
 				description: Returns a list of users
 				produces:
-				- application/json
+					- application/json
 				responses:
 					'200':
-						description: List of Ids
+						description: List of user objects
 						schema:
-								type: array
-								items:
-										type: integer
-		/users:
+							type: array
+							items:
+								type: User
 			post:
 				operationId: addUser
 				description: Adds a new user
 				produces:
-				- application/json
+					- application/json
 				parameters:
 					- name: email
-						in: path
+						in: body
 						description: user email
 						required: true
 						type: string
 					- name: firstname
-						in: path
+						in: body
 						description: first name
 						required: true
 						type: string
 					- name: lastname
-						in: path
+						in: body
 						description: user last name
 						required: true
 						type: string
-					- name: strava_token
-						in: path
-						description: user strava token
-						required: true
-						type: string
 					- name: age
-						in: path
+						in: body
 						description: user age
 						required: false
 						type: integer
 					- name: weight
-						in: path
+						in: body
 						description: user weight
 						required: false
 						type: integer
 					- name: max_hr
-						in: path
+						in: body
 						description: max heart rate
 						required: false
 						type: float
 					- name: rest_hr
-						in: path
+						in: body
 						description: heart rate at rest
 						required: false
 						type: float
 					- name: vo2max
-						in: path
+						in: body
 						description: max volume of oxygen
 						required: false
 						type: float
@@ -106,15 +72,98 @@ paths:
 						description: new user id
 						schema:
 							type: integer
+					'409':
+						description: The user already exists
+					'400':
+						description: bad request
 							
 		/users/{user_id}:
 			get:
 				operationId: getUser
 				description: Returns a single user
 				produces:
-				- application/json
+					- application/json
+				parameters:
+					- name: user_id
+					  in: path
+					  required: true
 				responses:
 					'200':
-						description: User Id
+						description: User object
 						schema:
-							type: integer
+							type: User
+					'404':
+						description: The user doesn't exists
+			delete:
+				operationId: deleteUser
+				description: Deletion of the user
+				produces:
+					- application/json
+				parameters:
+					- name: user_id
+					  in: path
+					  required: true
+				responses:
+					'200':
+						description: The deletion is successful
+					'404':
+						description: The user doesn't exists
+
+		/runs:
+			post:
+				operationId: addRuns
+				description: Adds runs
+				produces:
+					- application/json
+				parameters:
+				- name: title
+				  in: body
+				  required: true
+				- name: title
+				  in: body
+				  required: true
+				- name: title
+				  in: body
+				  required: true
+				- name: title
+				  in: body
+				  required: true
+				responses:
+					'200':
+						description: List of run object
+						schema:
+							type: array
+							items:
+								type: Run
+
+		/runs/{runner_id}:
+			get:
+				operationId: getRuns
+				description: Get Runs of the runner id
+				produces:
+					- application/json
+				parameters:
+					- name: runner_id
+						in: path
+						description: The user id
+						required: true
+						type: integer
+						responses:
+							'200':
+								description: List of run object
+									schema:
+										type: array
+										items:
+											type: Run
+		/runs/{run_id}:
+			get:
+				operationId: getRun
+				description: Returns a single run
+				produces:
+					- application/json
+				parameters:
+					- name: id
+				in: path
+				responses:
+					'200':
+						description:
