@@ -4,6 +4,8 @@ _Manage the database_
 [![Build Status](https://travis-ci.org/ytbeepbeep/data-service.svg?branch=master)](https://travis-ci.org/ytbeepbeep/data-service)
 [![Coverage Status](https://coveralls.io/repos/github/ytbeepbeep/data-service/badge.svg?branch=master)](https://coveralls.io/github/ytbeepbeep/data-service?branch=master)
 
+_This microservice works on port 5002._
+
 ## Install
 - `pip install -r requirements.txt`
 - `python setup.py develop`
