@@ -20,10 +20,10 @@ install:
 
 script:
   - pytest --cov-config .coveragerc --cov $MODULE_NAME ${MODULE_NAME}/tests
-  - docker build --pull --cache-from $IMAGE_NAME --tag $IMAGE_NAME .
 
 after_success:
   - coveralls
+  - docker build --pull --cache-from $IMAGE_NAME --tag $IMAGE_NAME .
 
 before_deploy:
   - version=${VERSION}.${TRAVIS_BUILD_NUMBER}
