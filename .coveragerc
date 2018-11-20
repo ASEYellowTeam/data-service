@@ -3,7 +3,7 @@
 branch = True
 
 # Files and folders to be omitted by the tests coverage
-omit = dataservice/tests/*, .tox/*, *venv*, */tests/*
+omit = *venv*, */tests/*
 
 
 [report]
