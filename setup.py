@@ -4,11 +4,17 @@ from distutils.sysconfig import get_python_lib
 
 from setuptools import find_packages, setup
 
+# CHANGE THIS -----
+REPO_NAME = "data-service"
+MODULE_NAME = "dataservice"
+# -----------------
+
 CURRENT_PYTHON = sys.version_info[:2]
 REQUIRED_PYTHON = (3, 6)
 
 # This check and everything above must remain compatible with Python 2.7.
 if CURRENT_PYTHON < REQUIRED_PYTHON:
+    # noinspection PyStringFormat
     sys.stderr.write("""
 ==========================
 Unsupported Python version
@@ -62,10 +68,10 @@ with open('requirements.txt') as fp:
 
 
 setup(
-    name='dataservice',
+    name=MODULE_NAME,
     version="0.2",
     python_requires='>={}.{}'.format(*REQUIRED_PYTHON),
-    url='https://github.com/ytbeepbeep/data-service',
+    url='https://github.com/ytbeepbeep/'+REPO_NAME,
     author='Yellow Team',
     author_email='ytbeepbeep@gmail.com',
     description='Send reports via mail',
@@ -86,14 +92,13 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
     ],
     project_urls={
-        'Source': 'https://github.com/ytbeepbeep/data-service',
+        'Source': 'https://github.com/ytbeepbeep/'+REPO_NAME,
     },
 )
 
 
 if overlay_warning:
     sys.stderr.write("""
-
 ========
 WARNING!
 ========
