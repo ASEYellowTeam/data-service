@@ -1,396 +1,567 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
-	title: beepbeep Data Service
-	description: returns info about beepbeep
-	license:
-		name: APLv2
-		url: https://www.apache.org/licenses/LICENSE-2.0.html
-	version: 0.1.0
-basePath: /api
+  title: beepbeep Data Service
+  description: returns info about beepbeep
+  license:
+    name: APLv2
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: '0.2'
 paths:
-		/users:
-			get:
-				operationId: getUsers
-				description: Returns a list of users
-				produces:
-					- application/json
-				responses:
-					'200':
-						description: List of user objects
-						schema:
-							type: array
-							items:
-								type: user
-			post:
-				operationId: addUser
-				description: Adds a new user
-				produces:
-					- application/json
-				parameters:
-					- name: email
-					  in: body
-					  description: user email
-					  required: true
-					  type: string
-					- name: firstname
-					  in: body
-					  description: first name
-					  required: true
-					  type: string
-					- name: lastname
-					  in: body
-					  description: user last name
-					  required: true
-					  type: string
-					- name: age
-					  in: body
-					  description: user age
-					  required: false
-					  type: integer
-					- name: weight
-					  in: body
-					  description: user weight
-					  required: false
-					  type: integer
-					- name: max_hr
-					  in: body
-					  description: max heart rate
-					  required: false
-					  type: float
-					- name: rest_hr
-					  in: body
-					  description: heart rate at rest
-					  required: false
-					  type: float
-					- name: vo2max
-					  in: body
-					  description: max volume of oxygen
-					  required: false
-					  type: float
-				responses:
-					'200':
-						description: new user object
-						schema:
-							type: user
-					'409':
-						description: The user already exists
-					'400':
-						description: bad request
+    /users:
+      get:
+        operationId: getUsers
+        description: Returns a list of users
+        responses:
+          '200':
+            description: List of user objects
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/definitions/User'
+      post:
+        operationId: addUser
+        description: Adds a new user
+        parameters:
+          - name: email
+            in: query
+            description: user email
+            required: true
+            schema:
+              type: string
+          - name: firstname
+            in: query
+            description: first name
+            required: true
+            schema:
+              type: string
+          - name: lastname
+            in: query
+            description: user last name
+            required: true
+            schema:
+              type: string
+          - name: age
+            in: query
+            description: user age
+            required: false
+            schema:
+              type: integer
+          - name: weight
+            in: query
+            description: user weight
+            required: false
+            schema:
+              type: integer
+          - name: max_hr
+            in: query
+            description: max heart rate
+            required: false
+            schema:
+              type: number
+          - name: rest_hr
+            in: query
+            description: heart rate at rest
+            required: false
+            schema:
+              type: number
+          - name: vo2max
+            in: query
+            description: max volume of oxygen
+            required: false
+            schema:
+              type: number
+        responses:
+          '200':
+            description: A JSON object containing the new User ID.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    user_id:
+                      type: string
+                      description: The new User ID.
+          '409':
+            $ref: '#/definitions/AlreadyExistent'
+          '400':
+            $ref: '#/definitions/BadRequest'
+            
+    /user/{user_id}:
+      get:
+        operationId: getUser
+        description: Returns a single user
+        parameters:
+          - name: user_id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: User object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/definitions/User'
+          '404':
+            $ref: '#/definitions/NotFound'
+      delete:
+        operationId: deleteUser
+        description: Deletion of the user
+        parameters:
+          - name: user_id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            $ref: '#/definitions/OK'
+          '400':
+            $ref: '#/definitions/BadRequest'
+          '404':
+            $ref: '#/definitions/NotFound'
+    /runs:
+      post:
+        operationId: addRuns
+        description: Adds runs
+        parameters:
+          - name: title
+            in: query
+            required: true
+            schema:
+              type: string
+          - name: description
+            in: query
+            required: true
+            schema:
+              type: string
+          - name: strava_id
+            in: query
+            required: true
+            schema:
+              type: integer
+          - name: distance
+            in: query
+            required: true
+            schema:
+              type: number
+          - name: start_date
+            in: query
+            required: true
+            schema:
+              type: string
+          - name: elapsed_time
+            in: query
+            required: true
+            schema:
+              type: number
+          - name: average_speed
+            in: query
+            required: true
+            schema:
+              type: number
+          - name: average_heartrate
+            in: query
+            required: true
+            schema:
+              type: number
+          - name: total_elevation_gain
+            in: query
+            required: true
+            schema:
+              type: number
+          - name: runner_id
+            in: query
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: List of run object
+            content: 
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Run'
+          '400':
+            $ref: '#/definitions/BadRequest'
+      get:
+        operationId: getRuns
+        description: Get Runs of the user id
+        parameters:
+          - name: user_id
+            in: query
+            description: The user id
+            required: true
+            schema:
+              type: integer
+        responses:
+            '200':
+              description: List of run objects
+              content:
+                  application/json:
+                    schema:
+                      type: array
+                      items:
+                        $ref: '#/definitions/Run'
+            '400':
+              $ref: '#/definitions/BadRequest'
 
 
-		/user/{user_id}:
-			get:
-				operationId: getUser
-				description: Returns a single user
-				produces:
-					- application/json
-				parameters:
-					- name: user_id
-					  in: path
-					  required: true
-				responses:
-					'200':
-						description: User object
-						schema:
-							type: user
-					'404':
-						description: The user doesn't exists
-			delete:
-				operationId: deleteUser
-				description: Deletion of the user
-				produces:
-					- application/json
-				parameters:
-					- name: user_id
-					  in: path
-					  required: true
-				responses:
-					'200':
-						description: The deletion is successful
-					'404':
-						description: The user does not exists
-					'400':
-						description: bad request
+    /runs/{run_id}:
+      get:
+        operationId: getRun
+        description: Returns a single run
+        parameters:
+          - name: run_id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: run object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/definitions/Run'
+          '404':
+            $ref: '#/definitions/NotFound'
 
-		/runs:
-			post:
-				operationId: addRuns
-				description: Adds runs
-				produces:
-					- application/json
-				parameters:
-					- name: title
-					  in: body
-					  required: true
-					  type: string
-					- name: description
-					  in: body
-					  required: true
-					  type: string
-					- name: strava_id
-					  in: body
-					  required: true
-					  type: integer
-					- name: distance
-					  in: body
-					  required: true
-					  type: float
-					- name: start_date
-					  in: body
-					  required: true
-					  type: date
-					- name: elapsed_time
-					  in: body
-					  required: true
-					  type: float
-					- name: average_speed
-					  in: body
-					  required: true
-					  type: float
-					- name: average_heartrate
-					  in: body
-					  required: true
-					  type: float
-					- name: total_elevation_gain
-					  in: body
-					  required: true
-					  type: float
-					- name: runner_id
-					  in: body
-					  required: true
-					  type: integer
-				responses:
-					'200':
-						description: List of run object
-						  schema:
-							  type: array
-							  items:
-								  type: Run
-					'400':
-						description: bad request
-			get:
-				operationId: getRuns
-				description: Get Runs of the user id
-				produces:
-					- application/json
-				parameters:
-					- name: user_id
-					  in: query
-					  description: The user id
-					  required: true
-					  type: integer
-				responses:
-					  '200':
-						  description: List of run objects
-							  schema:
-								  type: array
-								  items:
-									  type: run
-					  '400':
-						  description: bad request
+    /objectives:
+      get:
+        operationId: getObjectives
+        description: Return all the objectives of the user id
+        parameters:
+          - name: user_id
+            in: query
+            description: The user id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: List of objective objects
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Objective'
+          '400':
+            $ref: '#/definitions/BadRequest'
+          '404':
+            $ref: '#/definitions/BadRequest'
+      post:
+        operationId: createObjective
+        description: Create a new Objective object
+        parameters:
+          - name: user_id
+            in: query
+            description: The user id
+            required: true
+            schema:
+              type: integer
+          - name: name
+            in: query
+            description: name of the objective
+            required: true
+            schema:
+              type: string
+          - name: target_distance
+            in: query
+            description: target distance of the objective
+            required: true
+            schema:
+              type: number
+          - name: start_date
+            in: query
+            description: start date of the objective
+            required: true
+            schema:
+              type: string
+          - name: end_date
+            in: query
+            description: end date of the objective
+            required: true
+            schema:
+              type: string
+          - name: runner_id
+            in: query
+            description: user id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: objective object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/definitions/Objective'
+          '400':
+            $ref: '#/definitions/BadRequest'
 
+    /objectives/{objective_id}:
+      get:
+        operationId: getObjective
+        description: Return the objective id of the user id
+        parameters:
+          - name: objective_id
+            in: path
+            required: true
+            schema:
+              type: integer
+          - name: user_id
+            in: query
+            description: The user id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: objective object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/definitions/Objective'
+          '400':
+            $ref: '#/definitions/BadRequest'
 
-		/runs/{run_id}:
-			get:
-				operationId: getRun
-				description: Returns a single run
-				produces:
-					- application/json
-				parameters:
-					- name: run_id
-					  in: path
-			    responses:
-				    '200':
-					    description: run object
-					    schema:
-						    type: run
-				    '404':
-					    description: The run doesn't exists
-
-		/objectives:
-			get:
-				operationId: getObjectives
-				description: Return all the objectives of the user id
-				produces:
-					- application/json
-				parameters:
-					- name: user_id
-					  in: query
-					  description: The user id
-					  required: true
-					  type: integer
-			    responses:
-				    '200':
-					    description: List of objective objects
-					    schema:
-						    type: array
-						    items:
-							    type: objective
-					'400':
-						description: bad request
-					'404':
-						description: The challenge does not exists
-			post:
-				operationId: createObjective
-				description: Create a new Objective object
-				produces:
-					- application/json
-				parameters:
-					- name: user_id
-					  in: query
-					  description: The user id
-					  required: true
-					  type: integer
-					- name: name
-					  in: body
-					  description: name of the objective
-					  required: true
-					  type: string
-					- name: target_distance
-					  in: body
-					  description: target distance of the objective
-					  required: true
-					  type: float
-					- name: start_date
-					  in: body
-					  description: start date of the objective
-					  required: true
-					  type: date
-					- name: end_date
-					  in: body
-					  description: end date of the objective
-					  required: true
-					  type: date
-					- name: runner_id
-					  in: body
-					  description: user id
-					  required: true
-					  type: integer
-				responses:
-					'200':
-						description: objective object
-						schema:
-							type: objective
-					'400':
-						description: bad request
-
-		/objectives/{objective_id}:
-			get:
-				operationId: getObjective
-				description: Return the objective id of the user id
-				produces:
-					- application/json
-				parameters:
-					- name: objective_id
-					  in: path
-					  required: true
-					- name: user_id
-					  in: query
-					  description: The user id
-					  required: true
-					  type: integer
-				responses:
-					'200':
-						description: objective object
-						schema:
-							type: objective
-					'400':
-						description: bad request
+    /challenges:
+      get:
+        operationId: getChallenges
+        description: Return all the challenges of the user id
+        parameters:
+          - name: user_id
+            in: query
+            description: The user id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: List of challenge objects
+            content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Challenge'
+          '400':
+            $ref: '#/definitions/BadRequest'
+      post:
+        operationId: createChallenge
+        description: Create a new Challenge object
+        parameters:
+          - name: run_one
+            in: query
+            description: id of the first run
+            required: true
+            schema:
+              type: integer
+          - name: name_run_one
+            in: query
+            description: name of the first run
+            required: true
+            schema:
+              type: number
+          - name: run_two
+            in: query
+            description: id of the second run
+            required: true
+            schema:
+              type: integer
+          - name: name_run_two
+            in: query
+            description: name of the second run
+            required: true
+            schema:
+              type: string
+          - name: id_user
+            in: query
+            description: user id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: challenge object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/definitions/Challenge'
+          '400':
+            $ref: '#/definitions/BadRequest'
 
 
-		/challenges:
-			get:
-				operationId: getChallenges
-				description: Return all the challenges of the user id
-				produces:
-					- application/json
-				parameters:
-					- name: user_id
-					  in: query
-					  description: The user id
-					  required: true
-					  type: integer
-			    responses:
-				    '200':
-					    description: List of challenge objects
-					    schema:
-						    type: array
-						    items:
-							    type: challenge
-					'400':
-						description: bad request
-			post:
-				operationId: createChallenge
-				description: Create a new Challenge object
-				produces:
-					- application/json
-				parameters:
-					- name: run_one
-					  in: body
-					  description: id of the first run
-					  required: true
-					  type: integer
-					- name: name_run_one
-					  in: body
-					  description: name of the first run
-					  required: true
-					  type: float
-					- name: run_two
-					  in: body
-					  description: id of the second run
-					  required: true
-					  type: integer
-					- name: name_run_two
-					  in: body
-					  description: name of the second run
-					  required: true
-					  type: date
-					- name: id_user
-					  in: body
-					  description: user id
-					  required: true
-					  type: integer
-				responses:
-					'200':
-						description: challenge object
-						schema:
-							type: object
-							item: challenge
-					'400':
-						description: bad request
+    /challenges/{challenge_id}:
+      get:
+        operationId: getChallenge
+        description: Return the challenge id
+        parameters:
+          - name: challenge_id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: challenge object
+            content:
+              application/json:
+                schema:
+                  $ref: '#/definitions/Challenge'
+          '400':
+            $ref: '#/definitions/BadRequest'
+          '404':
+            $ref: '#/definitions/NotFound'
 
+definitions:
+  OK:
+    description: Success.
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Error'
+  BadRequest:
+    description: The request was not well formed.
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Error'
+  NotFound:
+    description: The specified resource was not found.
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Error'
+  AlreadyExistent:
+    description: The specified resource is already present.
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Error'
 
-		/challenges/{challenge_id}:
-			get:
-				operationId: getChallenge
-				description: Return the challenge id
-				produces:
-					- application/json
-				parameters:
-					- name: challenge_id
-					  in: path
-					  required: true
-			    responses:
-				    '200':
-					    description: challenge object
-					    schema:
-						    type: challenge
-					'400':
-						description: bad request
-					'404':
-						description: The challenge does not exists
-
-		/statistics:
-			get:
-				operationId: getStatistics
-				description: Describe the statistics of the selected runs
-				produces:
-					- application/json
-				parameters:
-					# TO DO
-				responses:
-					'200':
-						description: statistics
-					'400':
-						description: bad request
-
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: The user ID.
+      email:
+        type: string
+        description: The user email.
+      firstname:
+        type: string
+        description: The user's first name.
+      lastname:
+        type: string
+        description: The user's last name.
+      strava_token:
+        type: integer
+        description: The user strava token.
+      age:
+        type: integer
+        description: The user's age.
+      weight:
+        type: integer
+        description: The user's weight.
+      max_hr:
+        type: integer
+        description: The user' max heart rate.
+      rest_hr:
+        type: integer
+        description: The user's heart rate at rest.
+      vo2max:
+        type: integer
+        description: The user vo2max.
+  Run:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: The run ID.
+      title:
+        type: string
+        description: The run title.
+      description:
+        type: string
+        description: The run description.
+      strava_id:
+        type: integer
+        description: The run strava_id.
+      distance:
+        type: integer
+        description: The run distance.
+      start_date:
+        type: string
+        description: The run starting date.
+      elapsed_time:
+        type: integer
+        description: The run duration.
+      average_speed:
+        type: integer
+        description: The run average speed.
+      average_heartrate:
+        type: integer
+        description: The run average heart rate.
+      total_elevation_gain:
+        type: integer
+        description: The run total elevation gain.
+      runner_id:
+        type: integer
+        description: The user ID of the runner.
+  Objective:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: The Objective ID.
+      name:
+        type: string
+        description: The Objective name.
+      target_distance:
+        type: integer
+        description: The Objective target_distance.
+      start_date:
+        type: string
+        description: The Objective starting date.
+      end_date:
+        type: integer
+        description: The Objective ending date.
+      runner_id:
+        type: integer
+        description: The user ID of the runner.
+  Challenge:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: The Challenge ID.
+      run_one:
+        type: integer
+        description: The first run ID.
+      name_run_one:
+        type: string
+        description: The first run name.
+      run_two:
+        type: integer
+        description: The second run ID.
+      name_run_two:
+        type: string
+        description: The second run name.
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message
