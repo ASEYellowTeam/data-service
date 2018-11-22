@@ -207,8 +207,6 @@ paths:
 				    '404':
 					    description: The run doesn't exists
 
-
-
 		/objectives:
 			get:
 				operationId: getObjectives
@@ -364,16 +362,11 @@ paths:
 
 		/challenges/{challenge_id}:
 			get:
-				operationId: getChallenges
-				description: Return all the challenges of the runner id
+				operationId: getChallenge
+				description: Return the challenge id
 				produces:
 					- application/json
 				parameters:
-					- name: user_id
-					  in: query
-					  description: The user id
-					  required: true
-					  type: integer
 					- name: challenge_id
 					  in: path
 					  required: true
