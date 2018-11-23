@@ -27,7 +27,7 @@ after_success:
 
 before_deploy:
   - version=${VERSION}.${TRAVIS_BUILD_NUMBER}
-  - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  - echo $REGISTRY_PASS | docker login -u $REGISTRY_USER --password-stdin
   - docker tag $IMAGE_NAME ${IMAGE_NAME}:latest
   - docker tag $IMAGE_NAME ${IMAGE_NAME}:${version}
 deploy:
