@@ -1,14 +1,22 @@
 import os
 from datetime import datetime
-
 from flakon import SwaggerBlueprint
 from flask import request, jsonify
-from dataservice.database import db, User, Run
+from dataservice.database import db, User, Run, Objective, Challenge
 
-
+# Change of the path of the yaml file, now it is ok
 HERE = os.path.dirname(__file__)
-YML = os.path.join(HERE, '..', 'static', 'api.yaml')
+UP = os.path.dirname(os.path.dirname(HERE))
+YML = os.path.join(UP, "dataservice", 'static', 'api.yaml')
 api = SwaggerBlueprint('API', __name__, swagger_spec=YML)
+
+# TODO: loginUser and logoutUser
+#@api.operation('loginUser')
+#def login_user():
+
+
+#@api.operation('logoutUser')
+#def logout_user():
 
 
 @api.operation('getUsers')
@@ -21,7 +29,7 @@ def get_users():
 	if page != 0:
 		# TODO: review this pagination
 		users = users.offset(page * page_size)
-	return [user.to_json() for user in users]
+	return jsonify([user.to_json() for user in users])
 
 
 @api.operation('getUser')
@@ -52,8 +60,8 @@ def add_user():
 	db.session.commit()
 
 	# Return the new id
-	user_id = db.session.query(User).filter(User.email == user.email).first()
-	return {'user': user_id}
+	user = db.session.query(User).filter(User.email == user.email).first()
+	return user.to_json()
 
 
 @api.operation('deleteUser')
@@ -105,7 +113,7 @@ def get_run(run_id):
 	return run.to_json()
 
 @api.operation('getObjectives')
-def get_Objectives(user_id):
+def get_objectives(user_id):
 	objectives = db.session.query(Objective).filter(Objective.runner_id == user_id)
 	return jsonify([objective.to_json() for objective in objectives])
 
@@ -147,3 +155,4 @@ def create_challenge(user_id):
 def get_challenge(challenge_id):
 	challenge = db.session.query(Challenge).filter(Challenge.id == challenge_id)
 	return challenge.to_json()
+
