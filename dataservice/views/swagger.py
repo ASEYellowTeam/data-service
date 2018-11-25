@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from flakon import SwaggerBlueprint
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from dataservice.database import db, User, Run, Objective, Challenge
 
 # Change of the path of the yaml file, now it is ok
@@ -9,14 +9,6 @@ HERE = os.path.dirname(__file__)
 UP = os.path.dirname(os.path.dirname(HERE))
 YML = os.path.join(UP, "dataservice", 'static', 'api.yaml')
 api = SwaggerBlueprint('API', __name__, swagger_spec=YML)
-
-# TODO: loginUser and logoutUser
-#@api.operation('loginUser')
-#def login_user():
-
-
-#@api.operation('logoutUser')
-#def logout_user():
 
 
 @api.operation('getUsers')
@@ -42,15 +34,14 @@ def get_user(user_id):
 def add_user():
 	# Check if already exists
 	existing = db.session.query(User).filter(User.email == request.json['email']).first()
-	if existing:
-		return {'user_id': -1}
+	if existing is not None:
+		abort(409)
 
 	# Create a new user
 	user = User()
 	user.email = request.json['email']
 	user.firstname = request.json['firstname']
 	user.lastname = request.json['lastname']
-	user.strava_token = request.json['strava_token']
 	user.age = request.json['age']
 	user.weight = request.json['weight']
 	user.max_hr = request.json['max_hr']
@@ -60,8 +51,8 @@ def add_user():
 	db.session.commit()
 
 	# Return the new id
-	user = db.session.query(User).filter(User.email == user.email).first()
-	return user.to_json()
+	user_id = db.session.query(User).filter(User.email == user.email).first()
+	return {'user': user_id}
 
 
 @api.operation('deleteUser')
@@ -107,15 +98,18 @@ def get_runs(runner_id):
 	runs = db.session.query(Run).filter(Run.runner_id == runner_id)
 	return jsonify([run.to_json() for run in runs])
 
+
 @api.operation('getRun')
 def get_run(run_id):
 	run = db.session.query(Run).filter(Run.id == run_id)
 	return run.to_json()
 
+
 @api.operation('getObjectives')
 def get_objectives(user_id):
 	objectives = db.session.query(Objective).filter(Objective.runner_id == user_id)
 	return jsonify([objective.to_json() for objective in objectives])
+
 
 @api.operation('createObjective')
 def create_objective(user_id):
@@ -129,15 +123,18 @@ def create_objective(user_id):
 	db.session.commit()
 	return objective.to_json()
 
+
 @api.operation('getObjective')
 def get_objective(objective_id):
 	objective = db.session.query(Objective).filter(Objective.id == objective_id)
 	return objective.to_json()
 
+
 @api.operation('getChallenges')
 def get_challenges(user_id):
 	challenges = db.session.query(Challenge).filter(Challenge.runner_id == user_id)
 	return jsonify([challenge.to_json() for challenge in challenges])
+
 
 @api.operation('createChallenge')
 def create_challenge(user_id):
@@ -151,8 +148,8 @@ def create_challenge(user_id):
 	db.session.commit()
 	return challenge.to_json()
 
+
 @api.operation('getChallenge')
 def get_challenge(challenge_id):
 	challenge = db.session.query(Challenge).filter(Challenge.id == challenge_id)
 	return challenge.to_json()
-
