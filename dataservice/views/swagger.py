@@ -51,7 +51,7 @@ def add_user():
 	db.session.commit()
 
 	# Return the new id
-	user_id = db.session.query(User).filter(User.email == user.email).first()
+	user_id = db.session.query(User).filter(User.email == user.email).first().id
 	return {'user': user_id}
 
 

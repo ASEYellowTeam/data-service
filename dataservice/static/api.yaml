@@ -93,9 +93,9 @@ paths:
         type: "number"
       responses:
           200:
-            description: "A JSON object containing the new User ID."
+            description: "the new User ID."
             schema:
-              $ref: '#/definitions/User'
+              type: "integer"
           409:
             description: "The user already exists"
           400:
