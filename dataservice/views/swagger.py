@@ -94,8 +94,8 @@ def add_runs():
 
 
 @api.operation('getRuns')
-def get_runs(runner_id):
-	runs = db.session.query(Run).filter(Run.runner_id == runner_id)
+def get_runs(user_id):
+	runs = db.session.query(Run).filter(Run.runner_id == user_id)
 	return jsonify([run.to_json() for run in runs])
 
 

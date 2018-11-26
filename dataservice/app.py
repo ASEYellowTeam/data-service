@@ -4,10 +4,11 @@ from konfig import Config
 from flakon.blueprints import SwaggerBlueprint, JsonBlueprint
 from dataservice.database import db, User, Run, Objective, Challenge
 from flask_sqlalchemy import SQLAlchemy
+from dataservice.views import blueprints
 
 # This definition of the creation of the app is from flakon
 # it is important for allowing the recognition of yaml file
-def create_app(name=__name__, blueprints=None, settings=None):
+def create_app(name=__name__, settings=None):
     app = Flask(name)
 
     app.config['WTF_CSRF_SECRET_KEY'] = 'A SECRET KEY'
@@ -29,9 +30,8 @@ def create_app(name=__name__, blueprints=None, settings=None):
     #db = SQLAlchemy(app)
 
     # register blueprints
-    if blueprints is not None:
-        for bp in blueprints:
-            app.register_blueprint(bp)
+    for bp in blueprints:
+        app.register_blueprint(bp)
 
     #Init database
     db.init_app(app)

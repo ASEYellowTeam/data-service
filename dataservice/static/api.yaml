@@ -1,427 +1,422 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  title: "beepbeep Data Service"
-  description: "Returns info about beepbeep"
+  title: beepbeep Data Service
+  description: Returns info about beepbeep
   license:
-    name: "APLv2"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-  version: "1.0.0"
-host: "127.0.0.1"
+    name: APLv2
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+host: 127.0.0.1
 schemes:
-- "https"
-- "http"
+  - https
+  - http
 tags:
-- name: "user"
-  description: "Operations about user"
-- name: "run"
-  description: "Operations about run"
-- name: "objective"
-  description: "Operations about objective"
-- name: "challenge"
-  description: "Operations about challenge"
+  - name: user
+    description: Operations about user
+  - name: run
+    description: Operations about run
+  - name: objective
+    description: Operations about objective
+  - name: challenge
+    description: Operations about challenge
 paths:
   /users:
     get:
       tags:
-      - "user"
-      summary: "Get all the users"
-      operationId: "getUsers"
-      description: "This can only be done by the admin logged in user"
+        - user
+      summary: Get all the users
+      operationId: getUsers
+      description: This can only be done by the admin logged in user
       produces:
-      - "application/json"
+        - application/json
       responses:
-            200:
-              description: "List of user objects"
-              schema:
-                 type: "array"
-                 items:
-                   $ref: '#/definitions/User'
+        '200':
+          description: List of user objects
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
     post:
       tags:
-      - "user"
-      summary: "Create a new user"
-      operationId: "addUser"
-      description: "This can be done by everyone"
+        - user
+      summary: Create a new user
+      operationId: addUser
+      description: This can be done by everyone
       produces:
-      - "application/json"
+        - application/json
       parameters:
-      - name: "email"
-        in: "query"
-        description: "user email"
-        required: true
-        type: "string"
-      - name: "firstname"
-        in: "query"
-        description: "first name"
-        required: true
-        type: "string"
-      - name: "lastname"
-        in: "query"
-        description: "user last name"
-        required: true
-        type: "string"
-      - name: "strava_token"
-        in: "query"
-        description: "token of strava"
-        required: false
-        type: "string"
-      - name: "age"
-        in: "query"
-        description: "user age"
-        required: false
-        type: "integer"
-      - name: "weight"
-        in: "query"
-        description: "user weight"
-        required: false
-        type: "number"
-      - name: "max_hr"
-        in: "query"
-        description: "max heart rate"
-        required: false
-        type: "integer"
-      - name: "rest_hr"
-        in: "query"
-        description: "heart rate at rest"
-        required: false
-        type: "integer"
-      - name: "vo2max"
-        in: "query"
-        description: "max volume of oxygen"
-        required: false
-        type: "number"
+        - name: email
+          in: query
+          description: user email
+          required: true
+          type: string
+        - name: firstname
+          in: query
+          description: first name
+          required: true
+          type: string
+        - name: lastname
+          in: query
+          description: user last name
+          required: true
+          type: string
+        - name: strava_token
+          in: query
+          description: token of strava
+          required: false
+          type: string
+        - name: age
+          in: query
+          description: user age
+          required: false
+          type: integer
+        - name: weight
+          in: query
+          description: user weight
+          required: false
+          type: number
+        - name: max_hr
+          in: query
+          description: max heart rate
+          required: false
+          type: integer
+        - name: rest_hr
+          in: query
+          description: heart rate at rest
+          required: false
+          type: integer
+        - name: vo2max
+          in: query
+          description: max volume of oxygen
+          required: false
+          type: number
       responses:
-          200:
-            description: "the new User ID."
-            schema:
-              type: "integer"
-          409:
-            description: "The user already exists"
-          400:
-            description: "Bad request"
-  /user/{user_id}:
+        '200':
+          description: the new User ID.
+          schema:
+            type: integer
+        '400':
+          description: Bad request
+        '409':
+          description: The user already exists
+  '/user/{user_id}':
     get:
       tags:
-      - "user"
-      summary: "Get a single user"
-      operationId: "getUser"
-      description: "This can be done by the user_id and the task in background"
+        - user
+      summary: Get a single user
+      operationId: getUser
+      description: This can be done by the user_id and the task in background
       produces:
-      - "application/json"
+        - application/json
       parameters:
-      - name: "user_id"
-        in: "path"
-        required: true
-        type: "integer"
+        - name: user_id
+          in: path
+          required: true
+          type: integer
       responses:
-        200:
-          description: "User object"
+        '200':
+          description: User object
           schema:
             $ref: '#/definitions/User'
-        404:
-          description: "The user doesn't exists"
+        '404':
+          description: The user doesn't exists
     delete:
       tags:
-      - "user"
-      summary: "Deletion of the user"
-      operationId: "deleteUser"
-      description: "This can be done only by the user_id"
+        - user
+      summary: Deletion of the user
+      operationId: deleteUser
+      description: This can be done only by the user_id
       parameters:
-        - name: "user_id"
-          in: "path"
+        - name: user_id
+          in: path
           required: true
-          type: "integer"
+          type: integer
       responses:
-        200:
-          description: "Successful delete user"
-        400:
-          description: "Bad request"
-        404:
-          description: "The user doesn't exists"
+        '200':
+          description: Successful delete user
+        '400':
+          description: Bad request
+        '404':
+          description: The user doesn't exists
   /runs:
     get:
       tags:
-      - "run"
-      summary: "Get runs of all the users"
-      operationId: "getRuns"
-      description: "This can be done only by the data-pump and mail-pump"
+        - run
+      summary: Get runs of all the users
+      operationId: getRuns
+      description: This can be done only by the data-pump and mail-pump
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: user_id
+          in: query
+          description: The user id
+          required: true
+          type: integer
       responses:
-          200:
-            description: "List of run objects"
-            schema:
-              type: "array"
-              items:
-                $ref: '#/definitions/Run'
-          400:
-            description: "Bad request"
-    post:
-      tags:
-      - "run"
-      summary: "Add new user's runs"
-      operationId: "addRuns"
-      description: "This can be done only by data-pump"
-      parameters:
-      - name: "title"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "description"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "strava_id"
-        in: "query"
-        required: true
-        type: "integer"
-      - name: "distance"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "start_date"
-        in: "query"
-        required: true
-        type: "string"
-        format: "date-time"
-      - name: "elapsed_time"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "average_speed"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "average_heartrate"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "total_elevation_gain"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "runner_id"
-        in: "query"
-        required: true
-        type: "integer"
-      responses:
-        200:
-          description: "List of run object"
+        '200':
+          description: List of run objects
           schema:
-            type: "array"
+            type: array
             items:
               $ref: '#/definitions/Run'
-        400:
-          description: "Bad request"
-  /runs/{run_id}:
+        '400':
+          description: Bad request
+    post:
+      tags:
+        - run
+      summary: Add new user's runs
+      operationId: addRuns
+      description: This can be done only by data-pump
+      parameters:
+        - name: title
+          in: query
+          required: true
+          type: string
+        - name: description
+          in: query
+          required: true
+          type: string
+        - name: strava_id
+          in: query
+          required: true
+          type: integer
+        - name: distance
+          in: query
+          required: true
+          type: number
+        - name: start_date
+          in: query
+          required: true
+          type: string
+          format: date-time
+        - name: elapsed_time
+          in: query
+          required: true
+          type: number
+        - name: average_speed
+          in: query
+          required: true
+          type: number
+        - name: average_heartrate
+          in: query
+          required: true
+          type: number
+        - name: total_elevation_gain
+          in: query
+          required: true
+          type: number
+        - name: runner_id
+          in: query
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: List of run object
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Run'
+        '400':
+          description: Bad request
+  '/runs/{run_id}':
     get:
       tags:
-      - "run"
-      summary: "Get run"
-      operationId: "getRun"
-      description: "This can be done by all connected user"
+        - run
+      summary: Get run
+      operationId: getRun
+      description: This can be done by all connected user
       parameters:
-      - name: "run_id"
-        in: "path"
-        required: true
-        type: "integer"
+        - name: run_id
+          in: path
+          required: true
+          type: integer
       responses:
-        200:
-          description: "run object"
+        '200':
+          description: run object
           schema:
             $ref: '#/definitions/Run'
-        400:
-          description: "The run does not belong to the user"
-        404:
-          description: "The run id does not exists"      
-
+        '400':
+          description: The run does not belong to the user
+        '404':
+          description: The run id does not exists
   /objectives:
     get:
       tags:
-      - "objective"
-      summary: "Get objectives of user id"
-      operationId: "getObjectives"
-      description: "This can only be done by user id"
+        - objective
+      summary: Get objectives of user id
+      operationId: getObjectives
+      description: This can only be done by user id
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: user_id
+          in: query
+          description: The user id
+          required: true
+          type: integer
       responses:
-        200:
-          description: "List of objective objects"
+        '200':
+          description: List of objective objects
           schema:
-            type: "array"
+            type: array
             items:
               $ref: '#/definitions/Objective'
-        400:
-          description: "Bad Request"
-        404:
-          description: "There are no objectives for the user id"
+        '400':
+          description: Bad Request
+        '404':
+          description: There are no objectives for the user id
     post:
       tags:
-      - "objective"
-      summary: "Create objective for the user id"
-      operationId: "createObjective"
-      description: "This can only be done by connected user id"
+        - objective
+      summary: Create objective for the user id
+      operationId: createObjective
+      description: This can only be done by connected user id
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
-      - name: "name"
-        in: "query"
-        description: "name of the objective"
-        required: true
-        type: "string"
-      - name: "target_distance"
-        in: "query"
-        description: "target distance of the objective"
-        required: true
-        type: "number"
-      - name: "start_date"
-        in: "query"
-        description: "start date of the objective"
-        required: true
-        type: "string"
-        format: "date-time"
-      - name: "end_date"
-        in: "query"
-        description: "end date of the objective"
-        required: true
-        type: "string"
-        format: "date-time"
-      - name: "runner_id"
-        in: "query"
-        description: "user id"
-        required: true
-        type: "integer"
+        - name: user_id
+          in: query
+          description: The user id
+          required: true
+          type: integer
+        - name: name
+          in: query
+          description: name of the objective
+          required: true
+          type: string
+        - name: target_distance
+          in: query
+          description: target distance of the objective
+          required: true
+          type: number
+        - name: start_date
+          in: query
+          description: start date of the objective
+          required: true
+          type: string
+          format: date-time
+        - name: end_date
+          in: query
+          description: end date of the objective
+          required: true
+          type: string
+          format: date-time
+        - name: runner_id
+          in: query
+          description: user id
+          required: true
+          type: integer
       responses:
-        200:
-          description: "objective object"
+        '200':
+          description: objective object
           schema:
-                $ref: '#/definitions/Objective'
-        400:
-          description: "Bad Request"
-
-  /objectives/{objective_id}:
+            $ref: '#/definitions/Objective'
+        '400':
+          description: Bad Request
+  '/objectives/{objective_id}':
     get:
       tags:
-      - "objective"
-      summary: "Get object id of the user id"
-      operationId: "getObjective"
-      description: "This can be done only by connected user id"
+        - objective
+      summary: Get object id of the user id
+      operationId: getObjective
+      description: This can be done only by connected user id
       parameters:
-      - name: "objective_id"
-        in: "path"
-        required: true
-        type: "integer"
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: objective_id
+          in: path
+          required: true
+          type: integer
+        - name: user_id
+          in: query
+          description: The user id
+          required: true
+          type: integer
       responses:
-        200:
-          description: "objective object"
+        '200':
+          description: objective object
           schema:
-                $ref: '#/definitions/Objective'
-        400:
-          description: "Bad Request"
-
+            $ref: '#/definitions/Objective'
+        '400':
+          description: Bad Request
   /challenges:
     get:
       tags:
-      - "challenge"
-      summary: "Get all the challenges of the user id"
-      operationId: "getChallenges"
-      description: "This can be done only by connected user id"
+        - challenge
+      summary: Get all the challenges of the user id
+      operationId: getChallenges
+      description: This can be done only by connected user id
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: user_id
+          in: query
+          description: The user id
+          required: true
+          type: integer
       responses:
-        200:
-          description: "List of challenge objects"
+        '200':
+          description: List of challenge objects
           schema:
-              type: "array"
-              items:
-                $ref: '#/definitions/Challenge'
-        400:
-          description: "Bad Request"
+            type: array
+            items:
+              $ref: '#/definitions/Challenge'
+        '400':
+          description: Bad Request
     post:
       tags:
-      - "challenge"
-      summary: "Create a challenge for a user id"
+        - challenge
+      summary: Create a challenge for a user id
       operationId: createChallenge
-      description: "This can be done only by connected user id"
+      description: This can be done only by connected user id
       parameters:
-      - name: "run_one"
-        in: "query"
-        description: "id of the first run"
-        required: true
-        type: "integer"
-      - name: "name_run_one"
-        in: "query"
-        description: "name of the first run"
-        required: true
-        type: "number"
-      - name: "run_two"
-        in: "query"
-        description: "id of the second run"
-        required: true
-        type: "integer"
-      - name: "name_run_two"
-        in: "query"
-        description: "name of the second run"
-        required: true
-        type: "string"
-      - name: "id_user"
-        in: "query"
-        description: "user id"
-        required: true
-        type: "integer"
+        - name: run_one
+          in: query
+          description: id of the first run
+          required: true
+          type: integer
+        - name: name_run_one
+          in: query
+          description: name of the first run
+          required: true
+          type: number
+        - name: run_two
+          in: query
+          description: id of the second run
+          required: true
+          type: integer
+        - name: name_run_two
+          in: query
+          description: name of the second run
+          required: true
+          type: string
+        - name: id_user
+          in: query
+          description: user id
+          required: true
+          type: integer
       responses:
-        200:
-          description: "challenge object"
+        '200':
+          description: challenge object
           schema:
-                $ref: '#/definitions/Challenge'
-        400:
-          description: "Bad Request"
-          
-  /challenges/{challenge_id}:
+            $ref: '#/definitions/Challenge'
+        '400':
+          description: Bad Request
+  '/challenges/{challenge_id}':
     get:
       tags:
-      - "challenge"
-      summary: "Get challenge id"
-      operationId: "getChallenge"
-      description: "This can be done by connected user"
+        - challenge
+      summary: Get challenge id
+      operationId: getChallenge
+      description: This can be done by connected user
       parameters:
-        - name: "challenge_id"
-          in: "path"
+        - name: challenge_id
+          in: path
           required: true
-          type: "integer"
+          type: integer
       responses:
-        200:
-          description: "challenge object"
+        '200':
+          description: challenge object
           schema:
-                $ref: '#/definitions/Challenge'
-        400:
-          description: "The challenge belongs to another user"
-        404:
-          description: "The challenge doesn't exists"
-
+            $ref: '#/definitions/Challenge'
+        '400':
+          description: The challenge belongs to another user
+        '404':
+          description: The challenge doesn't exists
 definitions:
   User:
-    type: "object"
+    type: object
     required:
       - id
       - email
@@ -429,37 +424,37 @@ definitions:
       - lastname
     properties:
       id:
-        type: "integer"
-        description: "The user ID"
+        type: integer
+        description: The user ID
       email:
-        type: "string"
-        description: "The user email"
+        type: string
+        description: The user email
       firstname:
-        type: "string"
-        description: "The user's first name"
+        type: string
+        description: The user's first name
       lastname:
-        type: "string"
-        description: "The user's last name"
+        type: string
+        description: The user's last name
       strava_token:
-        type: "string"
-        description: "The user strava token"
+        type: string
+        description: The user strava token
       age:
-        type: "integer"
-        description: "The user's age"
+        type: integer
+        description: The user's age
       weight:
-        type: "number"
-        description: "The user's weight"
+        type: number
+        description: The user's weight
       max_hr:
-        type: "integer"
-        description: "The user' max heart rate"
+        type: integer
+        description: The user' max heart rate
       rest_hr:
-        type: "integer"
-        description: "The user's heart rate at rest"
+        type: integer
+        description: The user's heart rate at rest
       vo2max:
-        type: "number"
-        description: "The user vo2max"
+        type: number
+        description: The user vo2max
   Run:
-    type: "object"
+    type: object
     required:
       - id
       - title
@@ -474,41 +469,41 @@ definitions:
       - runner_id
     properties:
       id:
-        type: "integer"
-        description: "The run ID"
+        type: integer
+        description: The run ID
       title:
-        type: "string"
-        description: "The run title"
+        type: string
+        description: The run title
       description:
-        type: "string"
-        description: "The run description"
+        type: string
+        description: The run description
       strava_id:
-        type: "integer"
-        description: "The run strava_id"
+        type: integer
+        description: The run strava_id
       distance:
-        type: "integer"
-        description: "The run distance"
+        type: integer
+        description: The run distance
       start_date:
-        type: "string"
-        format: "date-time"
-        description: "The run starting date"
+        type: string
+        format: date-time
+        description: The run starting date
       elapsed_time:
-        type: "integer"
-        description: "The run duration"
+        type: integer
+        description: The run duration
       average_speed:
-        type: "integer"
-        description: "The run average speed"
+        type: integer
+        description: The run average speed
       average_heartrate:
-        type: "integer"
-        description: "The run average heart rate"
+        type: integer
+        description: The run average heart rate
       total_elevation_gain:
-        type: "integer"
-        description: "The run total elevation gain"
+        type: integer
+        description: The run total elevation gain
       runner_id:
-        type: "integer"
-        description: "The user ID of the runner"
+        type: integer
+        description: The user ID of the runner
   Objective:
-    type: "object"
+    type: object
     required:
       - id
       - name
@@ -518,27 +513,27 @@ definitions:
       - runner_id
     properties:
       id:
-        type: "integer"
-        description: "The Objective ID"
+        type: integer
+        description: The Objective ID
       name:
-        type: "string"
-        description: "The Objective name"
+        type: string
+        description: The Objective name
       target_distance:
-        type: "integer"
-        description: "The Objective target_distance"
+        type: integer
+        description: The Objective target_distance
       start_date:
-        type: "string"
-        format: "date-time"
-        description: "The Objective starting date"
+        type: string
+        format: date-time
+        description: The Objective starting date
       end_date:
-        type: "string"
-        format: "date-time"
-        description: "The Objective ending date"
+        type: string
+        format: date-time
+        description: The Objective ending date
       runner_id:
-        type: "integer"
-        description: "The user id of the runner"
+        type: integer
+        description: The user id of the runner
   Challenge:
-    type: "object"
+    type: object
     required:
       - id
       - run_one
@@ -547,20 +542,20 @@ definitions:
       - name_run_two
     properties:
       id:
-        type: "integer"
-        description: "The Challenge ID"
+        type: integer
+        description: The Challenge ID
       run_one:
-        type: "integer"
-        description: "The first run ID"
+        type: integer
+        description: The first run ID
       name_run_one:
-        type: "string"
-        description: "The first run name"
+        type: string
+        description: The first run name
       run_two:
-        type: "integer"
-        description: "The second run ID"
+        type: integer
+        description: The second run ID
       name_run_two:
-        type: "string"
-        description: "The second run name"
+        type: string
+        description: The second run name
       user_id:
-        type: "integer"
-        description: "The user id"
+        type: integer
+        description: The user id
