@@ -24,8 +24,8 @@ paths:
   /users:
     get:
       tags:
-      - user
-      summary: Get all the users"
+      - "user"
+      summary: "Get all the users"
       operationId: "getUsers"
       description: "This can only be done by the admin logged in user"
       produces:
