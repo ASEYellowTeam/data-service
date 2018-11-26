@@ -1,129 +1,129 @@
 swagger: "2.0"
 info:
   title: "beepbeep Data Service"
-  description: "Returns info about beepbeep"
+  description: "Run and user service for BeepBeep"
   license:
-    name: "APLv2"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-  version: "1.0.0"
-host: "127.0.0.1"
-basePath: "/beepbeep"
+    name: "AGPL-v3.0"
+    url: "https://www.gnu.org/licenses/agpl-3.0.en.html"
+  version: "0.2.0"
+host: "0.0.0.0"
+basePath: "/api"
 schemes:
-- "https"
-- "http"
+  - "https"
+  - "http"
 tags:
-- name: "user"
-  description: "Operations about user"
-- name: "run"
-  description: "Operations about run"
-- name: "objective"
-  description: "Operations about objective"
-- name: "challenge"
-  description: "Operations about challenge"
+  - name: "user"
+    description: "Operations about user"
+  - name: "run"
+    description: "Operations about run"
+  - name: "objective"
+    description: "Operations about objective"
+  - name: "challenge"
+    description: "Operations about challenge"
 paths:
   /users:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "Get all the users"
       operationId: "getUsers"
       description: "This can only be done by the admin logged in user"
       produces:
-      - "application/json"
+        - "application/json"
       responses:
-            200:
-              description: "List of user objects"
-              schema:
-                 type: "array"
-                 items:
-                   $ref: '#/definitions/User'
+        '200':
+          description: "List of user objects"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/User'
     post:
       tags:
-      - "user"
+        - "user"
       summary: "Create a new user"
       operationId: "addUser"
       description: "This can be done by everyone"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "email"
-        in: "query"
-        description: "user email"
-        required: true
-        type: "string"
-      - name: "firstname"
-        in: "query"
-        description: "first name"
-        required: true
-        type: "string"
-      - name: "lastname"
-        in: "query"
-        description: "user last name"
-        required: true
-        type: "string"
-      - name: "strava_token"
-        in: "query"
-        description: "token of strava"
-        required: false
-        type: "string"
-      - name: "age"
-        in: "query"
-        description: "user age"
-        required: false
-        type: "integer"
-      - name: "weight"
-        in: "query"
-        description: "user weight"
-        required: false
-        type: "number"
-      - name: "max_hr"
-        in: "query"
-        description: "max heart rate"
-        required: false
-        type: "integer"
-      - name: "rest_hr"
-        in: "query"
-        description: "heart rate at rest"
-        required: false
-        type: "integer"
-      - name: "vo2max"
-        in: "query"
-        description: "max volume of oxygen"
-        required: false
-        type: "number"
+        - name: "email"
+          in: "query"
+          description: "user email"
+          required: true
+          type: "string"
+        - name: "firstname"
+          in: "query"
+          description: "first name"
+          required: true
+          type: "string"
+        - name: "lastname"
+          in: "query"
+          description: "user last name"
+          required: true
+          type: "string"
+        - name: "strava_token"
+          in: "query"
+          description: "token of strava"
+          required: false
+          type: "string"
+        - name: "age"
+          in: "query"
+          description: "user age"
+          required: false
+          type: "integer"
+        - name: "weight"
+          in: "query"
+          description: "user weight"
+          required: false
+          type: "number"
+        - name: "max_hr"
+          in: "query"
+          description: "max heart rate"
+          required: false
+          type: "integer"
+        - name: "rest_hr"
+          in: "query"
+          description: "heart rate at rest"
+          required: false
+          type: "integer"
+        - name: "vo2max"
+          in: "query"
+          description: "max volume of oxygen"
+          required: false
+          type: "number"
       responses:
-          200:
-            description: "the new User ID."
-            schema:
-              type: "integer"
-          409:
-            description: "The user already exists"
-          400:
-            description: "Bad request"
+        '200':
+          description: "the new User ID."
+          schema:
+            type: "integer"
+        '409':
+          description: "The user already exists"
+        '400':
+          description: "Bad request"
   /user/{user_id}:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "Get a single user"
       operationId: "getUser"
       description: "This can be done by the user_id and the task in background"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "user_id"
-        in: "path"
-        required: true
-        type: "integer"
+        - name: "user_id"
+          in: "path"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "User object"
           schema:
             $ref: '#/definitions/User'
-        404:
+        '404':
           description: "The user doesn't exists"
     delete:
       tags:
-      - "user"
+        - "user"
       summary: "Deletion of the user"
       operationId: "deleteUser"
       description: "This can be done only by the user_id"
@@ -133,275 +133,275 @@ paths:
           required: true
           type: "integer"
       responses:
-        200:
+        '200':
           description: "Successful delete user"
-        400:
+        '400':
           description: "Bad request"
-        404:
+        '404':
           description: "The user doesn't exists"
   /runs:
     get:
       tags:
-      - "run"
+        - "run"
       summary: "Get runs of all the users"
       operationId: "getRuns"
       description: "This can be done only by the data-pump and mail-pump"
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: "user_id"
+          in: "query"
+          description: "The user id"
+          required: true
+          type: "integer"
       responses:
-          200:
-            description: "List of run objects"
-            schema:
-              type: "array"
-              items:
-                $ref: '#/definitions/Run'
-          400:
-            description: "Bad request"
+        '200':
+          description: "List of run objects"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Run'
+        '400':
+          description: "Bad request"
     post:
       tags:
-      - "run"
+        - "run"
       summary: "Add new user's runs"
       operationId: "addRuns"
       description: "This can be done only by data-pump"
       parameters:
-      - name: "title"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "description"
-        in: "query"
-        required: true
-        type: "string"
-      - name: "strava_id"
-        in: "query"
-        required: true
-        type: "integer"
-      - name: "distance"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "start_date"
-        in: "query"
-        required: true
-        type: "string"
-        format: "date-time"
-      - name: "elapsed_time"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "average_speed"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "average_heartrate"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "total_elevation_gain"
-        in: "query"
-        required: true
-        type: "number"
-      - name: "runner_id"
-        in: "query"
-        required: true
-        type: "integer"
+        - name: "title"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "description"
+          in: "query"
+          required: true
+          type: "string"
+        - name: "strava_id"
+          in: "query"
+          required: true
+          type: "integer"
+        - name: "distance"
+          in: "query"
+          required: true
+          type: "number"
+        - name: "start_date"
+          in: "query"
+          required: true
+          type: "string"
+          format: "date-time"
+        - name: "elapsed_time"
+          in: "query"
+          required: true
+          type: "number"
+        - name: "average_speed"
+          in: "query"
+          required: true
+          type: "number"
+        - name: "average_heartrate"
+          in: "query"
+          required: true
+          type: "number"
+        - name: "total_elevation_gain"
+          in: "query"
+          required: true
+          type: "number"
+        - name: "runner_id"
+          in: "query"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "List of run object"
           schema:
             type: "array"
             items:
               $ref: '#/definitions/Run'
-        400:
+        '400':
           description: "Bad request"
   /runs/{run_id}:
     get:
       tags:
-      - "run"
+        - "run"
       summary: "Get run"
       operationId: "getRun"
       description: "This can be done by all connected user"
       parameters:
-      - name: "run_id"
-        in: "path"
-        required: true
-        type: "integer"
+        - name: "run_id"
+          in: "path"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "run object"
           schema:
             $ref: '#/definitions/Run'
-        400:
+        '400':
           description: "The run does not belong to the user"
-        404:
-          description: "The run id does not exists"      
+        '404':
+          description: "The run id does not exists"
 
   /objectives:
     get:
       tags:
-      - "objective"
+        - "objective"
       summary: "Get objectives of user id"
       operationId: "getObjectives"
       description: "This can only be done by user id"
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: "user_id"
+          in: "query"
+          description: "The user id"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "List of objective objects"
           schema:
             type: "array"
             items:
               $ref: '#/definitions/Objective'
-        400:
+        '400':
           description: "Bad Request"
-        404:
+        '404':
           description: "There are no objectives for the user id"
     post:
       tags:
-      - "objective"
+        - "objective"
       summary: "Create objective for the user id"
       operationId: "createObjective"
       description: "This can only be done by connected user id"
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
-      - name: "name"
-        in: "query"
-        description: "name of the objective"
-        required: true
-        type: "string"
-      - name: "target_distance"
-        in: "query"
-        description: "target distance of the objective"
-        required: true
-        type: "number"
-      - name: "start_date"
-        in: "query"
-        description: "start date of the objective"
-        required: true
-        type: "string"
-        format: "date-time"
-      - name: "end_date"
-        in: "query"
-        description: "end date of the objective"
-        required: true
-        type: "string"
-        format: "date-time"
-      - name: "runner_id"
-        in: "query"
-        description: "user id"
-        required: true
-        type: "integer"
+        - name: "user_id"
+          in: "query"
+          description: "The user id"
+          required: true
+          type: "integer"
+        - name: "name"
+          in: "query"
+          description: "name of the objective"
+          required: true
+          type: "string"
+        - name: "target_distance"
+          in: "query"
+          description: "target distance of the objective"
+          required: true
+          type: "number"
+        - name: "start_date"
+          in: "query"
+          description: "start date of the objective"
+          required: true
+          type: "string"
+          format: "date-time"
+        - name: "end_date"
+          in: "query"
+          description: "end date of the objective"
+          required: true
+          type: "string"
+          format: "date-time"
+        - name: "runner_id"
+          in: "query"
+          description: "user id"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "objective object"
           schema:
-                $ref: '#/definitions/Objective'
-        400:
+            $ref: '#/definitions/Objective'
+        '400':
           description: "Bad Request"
 
   /objectives/{objective_id}:
     get:
       tags:
-      - "objective"
+        - "objective"
       summary: "Get object id of the user id"
       operationId: "getObjective"
       description: "This can be done only by connected user id"
       parameters:
-      - name: "objective_id"
-        in: "path"
-        required: true
-        type: "integer"
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: "objective_id"
+          in: "path"
+          required: true
+          type: "integer"
+        - name: "user_id"
+          in: "query"
+          description: "The user id"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "objective object"
           schema:
-                $ref: '#/definitions/Objective'
-        400:
+            $ref: '#/definitions/Objective'
+        '400':
           description: "Bad Request"
 
   /challenges:
     get:
       tags:
-      - "challenge"
+        - "challenge"
       summary: "Get all the challenges of the user id"
       operationId: "getChallenges"
       description: "This can be done only by connected user id"
       parameters:
-      - name: "user_id"
-        in: "query"
-        description: "The user id"
-        required: true
-        type: "integer"
+        - name: "user_id"
+          in: "query"
+          description: "The user id"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "List of challenge objects"
           schema:
-              type: "array"
-              items:
-                $ref: '#/definitions/Challenge'
-        400:
+            type: "array"
+            items:
+              $ref: '#/definitions/Challenge'
+        '400':
           description: "Bad Request"
     post:
       tags:
-      - "challenge"
+        - "challenge"
       summary: "Create a challenge for a user id"
-      operationId: createChallenge
+      operationId: "createChallenge"
       description: "This can be done only by connected user id"
       parameters:
-      - name: "run_one"
-        in: "query"
-        description: "id of the first run"
-        required: true
-        type: "integer"
-      - name: "name_run_one"
-        in: "query"
-        description: "name of the first run"
-        required: true
-        type: "number"
-      - name: "run_two"
-        in: "query"
-        description: "id of the second run"
-        required: true
-        type: "integer"
-      - name: "name_run_two"
-        in: "query"
-        description: "name of the second run"
-        required: true
-        type: "string"
-      - name: "id_user"
-        in: "query"
-        description: "user id"
-        required: true
-        type: "integer"
+        - name: "run_one"
+          in: "query"
+          description: "id of the first run"
+          required: true
+          type: "integer"
+        - name: "name_run_one"
+          in: "query"
+          description: "name of the first run"
+          required: true
+          type: "number"
+        - name: "run_two"
+          in: "query"
+          description: "id of the second run"
+          required: true
+          type: "integer"
+        - name: "name_run_two"
+          in: "query"
+          description: "name of the second run"
+          required: true
+          type: "string"
+        - name: "id_user"
+          in: "query"
+          description: "user id"
+          required: true
+          type: "integer"
       responses:
-        200:
+        '200':
           description: "challenge object"
           schema:
-                $ref: '#/definitions/Challenge'
-        400:
+            $ref: '#/definitions/Challenge'
+        '400':
           description: "Bad Request"
-          
+
   /challenges/{challenge_id}:
     get:
       tags:
-      - "challenge"
+        - "challenge"
       summary: "Get challenge id"
       operationId: "getChallenge"
       description: "This can be done by connected user"
@@ -411,13 +411,13 @@ paths:
           required: true
           type: "integer"
       responses:
-        200:
+        '200':
           description: "challenge object"
           schema:
-                $ref: '#/definitions/Challenge'
-        400:
+            $ref: '#/definitions/Challenge'
+        '400':
           description: "The challenge belongs to another user"
-        404:
+        '404':
           description: "The challenge doesn't exists"
 
 definitions:
