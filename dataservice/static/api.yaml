@@ -100,51 +100,6 @@ paths:
             description: "The user already exists"
           400:
             description: "Bad request"
-  /user/login:
-    get:
-      tags:
-      - "user"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "email"
-        in: "query"
-        description: "The user email for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful login"
-          schema:
-            type: "string"
-        400:
-          description: "Invalid username/password"
-  /user/logout:
-    get:
-      tags:
-      - "user"
-      summary: "Logs out current logged in user session"
-      description: "This can be done only by connected user if"
-      operationId: "logoutUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "user_id"
-        in: "query"
-        description: "user id"
-        required: true
-        type: "integer"
-      responses:
-        default:
-          description: "successful operation"
   /user/{user_id}:
     get:
       tags:
