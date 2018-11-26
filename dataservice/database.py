@@ -1,5 +1,3 @@
-# encoding: utf8
-import os
 from datetime import datetime
 from decimal import Decimal
 from sqlalchemy.orm import relationship
@@ -34,6 +32,7 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
+
 
 class Run(db.Model):
     __tablename__ = 'run'
@@ -91,6 +90,7 @@ class Objective(db.Model):
                 value = value.timestamp()
             res[attr] = value
         return res
+
 
 # add the table Challenge
 class Challenge(db.Model):
