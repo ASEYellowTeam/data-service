@@ -4,12 +4,6 @@ from flakon import SwaggerBlueprint
 from flask import request, jsonify, abort
 from dataservice.database import db, User, Run, Objective, Challenge
 
-# Change of the path of the yaml file, now it is ok
-# HERE = os.path.dirname(__file__)
-# UP = os.path.dirname(os.path.dirname(HERE))
-# YML = os.path.join(UP, "dataservice", 'static', 'api.yaml')
-# HERE = os.path.dirname(__file__)
-
 HERE = os.path.dirname(__file__)
 YML = os.path.join(HERE, '..', 'static', 'api.yaml')
 api = SwaggerBlueprint('API', __name__, swagger_spec=YML)
