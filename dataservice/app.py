@@ -3,8 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from dataservice.database import db
 from dataservice.views import blueprints
 
-# This definition of the creation of the app is from flakon
-# it is important for allowing the recognition of yaml file
+
 def create_app():
     app = Flask(__name__)
 
@@ -14,9 +13,6 @@ def create_app():
     # Database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataservice.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # Create the SqlAlchemy db instance
-    db = SQLAlchemy(app)
 
     # Register blueprints
     for blueprint in blueprints:
