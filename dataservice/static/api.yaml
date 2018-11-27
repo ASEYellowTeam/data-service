@@ -3,8 +3,8 @@ info:
   title: beepbeep Data Service
   description: Returns info about beepbeep
   license:
-    name: APLv2
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    name: AGPL-v3.0
+    url: "https://www.gnu.org/licenses/agpl-3.0.en.html"
   version: 1.0.0
 host: 127.0.0.1
 schemes:
