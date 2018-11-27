@@ -31,20 +31,21 @@ def get_user(user_id):
 @api.operation('addUser')
 def add_user():
     # Check if already exists
-    existing = db.session.query(User).filter(User.email == request.json['email']).first()
+    json = request.get_json()
+    existing = db.session.query(User).filter(User.email == json['email']).first()
     if existing:
         abort(409)
 
     # Create a new user
     user = User()
-    user.email = request.json['email']
-    user.firstname = request.json['firstname']
-    user.lastname = request.json['lastname']
-    user.age = request.json['age']
-    user.weight = request.json['weight']
-    user.max_hr = request.json['max_hr']
-    user.rest_hr = request.json['rest_hr']
-    user.vo2max = request.json['vo2max']
+    user.email = json['email']
+    user.firstname = json['firstname']
+    user.lastname = json['lastname']
+    user.age = json['age']
+    user.weight = json['weight']
+    user.max_hr = json['max_hr']
+    user.rest_hr = json['rest_hr']
+    user.vo2max = json['vo2max']
     db.session.add(user)
     db.session.commit()
 
