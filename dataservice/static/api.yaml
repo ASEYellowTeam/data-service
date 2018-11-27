@@ -124,6 +124,10 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
         - name: strava_token
           in: query
           description: token of Strava
