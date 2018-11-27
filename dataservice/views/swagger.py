@@ -53,6 +53,26 @@ def add_user():
     return {'user': user_id}
 
 
+@api.operation('setToken')
+def set_token(user_id):
+    strava_token = request.args.get('strava_token')
+    if not strava_token:
+        abort(400)
+
+    existing = db.session.query(User).filter(User.strava_token == strava_token).first()
+    if existing:
+        abort(409)
+
+    user = db.session.query(User).filter(User.id == user_id).first()
+    if not user:
+        abort(404)
+
+    user.strava_token = strava_token
+    db.session.merge(user)
+    db.session.commit()
+    return True
+
+
 @api.operation('deleteUser')
 def delete_user(user_id):
     user = db.session.query(User).filter(User.id == user_id).first()

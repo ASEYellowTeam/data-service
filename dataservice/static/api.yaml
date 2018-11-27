@@ -60,11 +60,6 @@ paths:
           description: user last name
           required: true
           type: string
-        - name: strava_token
-          in: query
-          description: token of strava
-          required: false
-          type: string
         - name: age
           in: query
           description: user age
@@ -120,6 +115,29 @@ paths:
             $ref: '#/definitions/User'
         '404':
           description: The user doesn't exists
+    post:
+      tags:
+        - user
+      summary: Set the Strava token
+      operationId: setToken
+      description: Set the Strava token to the specified user. The token is used to fetch data from Strava.
+      produces:
+        - application/json
+      parameters:
+        - name: strava_token
+          in: query
+          description: token of Strava
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Ok
+        '400':
+          description: Bad request
+        '404':
+          description: The user doesn't exists
+        '409':
+          description: The token is used by another user
     delete:
       tags:
         - user
