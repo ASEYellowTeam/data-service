@@ -23,7 +23,7 @@ class User(db.Model):
     def to_json(self):
         res = {}
         for attr in ('id', 'email', 'firstname', 'lastname', 'age', 'weight',
-                     'max_hr', 'rest_hr', 'vo2max'):
+                     'max_hr', 'rest_hr', 'vo2max', 'strava_token'):
             value = getattr(self, attr)
             if isinstance(value, Decimal):
                 value = float(value)

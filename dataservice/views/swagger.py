@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from flakon import SwaggerBlueprint
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, make_response
 from dataservice.database import db, User, Run, Objective, Challenge
 
 HERE = os.path.dirname(__file__)
@@ -33,7 +33,8 @@ def add_user():
     # Check if already exists
     json = request.get_json()
     existing = db.session.query(User).filter(User.email == json['email']).first()
-    if existing:
+    print(existing)
+    if existing is not None:
         abort(409)
 
     # Create a new user
@@ -56,7 +57,8 @@ def add_user():
 
 @api.operation('setToken')
 def set_token(user_id):
-    strava_token = request.args.get('strava_token')
+    strava_token = request.json['strava_token']
+    print(strava_token)
     if not strava_token:
         abort(400)
 
@@ -69,20 +71,21 @@ def set_token(user_id):
         abort(404)
 
     user.strava_token = strava_token
-    db.session.merge(user)
+    print(user)
+    db.session.add(user)
     db.session.commit()
-    return True
+    return make_response('ok')
 
 
 @api.operation('deleteUser')
 def delete_user(user_id):
     user = db.session.query(User).filter(User.id == user_id).first()
     if not user:
-        return False
+        return abort(404)
 
     db.session.delete(user)
     db.session.commit()
-    return True
+    return make_response('ok')
 
 
 @api.operation('addRuns')
