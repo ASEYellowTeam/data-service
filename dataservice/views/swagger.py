@@ -25,6 +25,8 @@ def get_users():
 @api.operation('getUser')
 def get_user(user_id):
     user = db.session.query(User).filter(User.id == user_id).first()
+    if user is None:
+        abort(404)
     return user.to_json()
 
 
@@ -58,10 +60,11 @@ def add_user():
 
 @api.operation('setToken')
 def set_token(user_id):
-    strava_token = request.json['strava_token']
-    print(strava_token)
-    if not strava_token:
+    strava_token = request.get_json()
+    if not 'strava_token' in strava_token:
         abort(400)
+    strava_token = strava_token['strava_token']
+
 
     existing = db.session.query(User).filter(User.strava_token == strava_token).first()
     if existing:
@@ -95,6 +98,12 @@ def add_runs():
     for user, runs in request.json.items():
         runner_id = int(user)
         for run in runs:
+
+            run_old = db.session.query(Run).filter(Run.strava_id == run['strava_id']).first()
+
+            if run_old is not None:
+                continue
+
             db_run = Run()
             db_run.strava_id = run['strava_id']
             db_run.distance = run['distance']
@@ -112,7 +121,7 @@ def add_runs():
 
     if added > 0:
         db.session.commit()
-
+    print(db_run)
     return {'added': added}
 
 
