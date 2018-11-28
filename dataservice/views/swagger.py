@@ -25,6 +25,8 @@ def get_users():
 @api.operation('getUser')
 def get_user(user_id):
     user = db.session.query(User).filter(User.id == user_id).first()
+    if user is None:
+        abort(404)
     return user.to_json()
 
 
@@ -58,10 +60,11 @@ def add_user():
 
 @api.operation('setToken')
 def set_token(user_id):
-    strava_token = request.json['strava_token']
-    print(strava_token)
-    if not strava_token:
+    strava_token = request.get_json()
+    if not 'strava_token' in strava_token:
         abort(400)
+    strava_token = strava_token['strava_token']
+
 
     existing = db.session.query(User).filter(User.strava_token == strava_token).first()
     if existing:

@@ -63,3 +63,74 @@ def test_get_users(client):
                               " 'lastname': 'rossi', 'max_hr': 120, 'rest_hr': 60, 'strava_token': None, 'vo2max': 0.0," \
                               " 'weight': 70.0}]"
 
+
+def test_get_user(client):
+    tested_app, app = client
+
+    user1 = new_user()
+    user_json = user1.to_json()
+
+    # getting non existing user
+    reply = tested_app.get('/user/1')
+    assert reply.status_code == 404
+
+    # inserting 'mario@rossi.it', the only one in DB -> id=1
+    assert tested_app.post('/users', json=user_json).status_code == 200
+
+    reply = tested_app.get('user/1')
+    users_json = json.loads(str(reply.data, 'utf8'))
+
+    assert str(users_json) == "{'age': 23, 'email': 'mario@rossi.it', 'firstname': 'mario', 'id': 1, 'lastname': " \
+                              "'rossi', 'max_hr': 120, 'rest_hr': 60, 'strava_token': None, 'vo2max': 0.0, " \
+                              "'weight': 70.0}"
+
+
+def test_set_token(client):
+    tested_app, app = client
+
+    # syntactically wrong request
+    reply = tested_app.post('user/1', json={})
+    assert reply.status_code == 400
+
+    # user 1 not existing
+    reply = tested_app.post('user/1', json={'strava_token': 'aaaaa'})
+    assert reply.status_code == 404
+
+    user1 = new_user()
+    json = user1.to_json()
+
+    # inserting 'mario@rossi.it', the only one in DB
+    assert tested_app.post('/users', json=json).status_code == 200
+
+    # correct request
+    reply = tested_app.post('user/1', json={'strava_token': 'aaaaa'})
+    assert reply.status_code == 200
+
+    user2 = new_user(email='paolo@rossi.it')
+    json = user2.to_json()
+
+    # inserting 'paolo@rossi.it'
+    assert tested_app.post('/users', json=json).status_code == 200
+
+    # two person with same token
+    reply = tested_app.post('user/2', json={'strava_token': 'aaaaa'})
+    assert reply.status_code == 409
+
+
+def test_delete_user(client):
+    tested_app, app = client
+
+    # user 1 not existing
+    reply = tested_app.delete('user/1')
+    assert reply.status_code == 404
+
+    user1 = new_user()
+    json = user1.to_json()
+
+    # inserting 'mario@rossi.it', the only one in DB
+    assert tested_app.post('/users', json=json).status_code == 200
+
+    # deleting correctly
+    reply = tested_app.delete('user/1')
+    assert reply.status_code == 200
+
