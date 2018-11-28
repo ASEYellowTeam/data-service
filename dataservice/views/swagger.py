@@ -47,6 +47,7 @@ def add_user():
     user.max_hr = json['max_hr']
     user.rest_hr = json['rest_hr']
     user.vo2max = json['vo2max']
+
     db.session.add(user)
     db.session.commit()
 
