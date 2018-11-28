@@ -89,11 +89,11 @@ def test_set_token(client):
     tested_app, app = client
 
     # syntactically wrong request
-    reply = tested_app.post('user/1', json={})
+    reply = tested_app.post('/users/1', json={})
     assert reply.status_code == 400
 
     # user 1 not existing
-    reply = tested_app.post('user/1', json={'strava_token': 'aaaaa'})
+    reply = tested_app.post('/users/1', json={'strava_token': 'aaaaa'})
     assert reply.status_code == 404
 
     user1 = new_user()
@@ -103,7 +103,7 @@ def test_set_token(client):
     assert tested_app.post('/users', json=json).status_code == 200
 
     # correct request
-    reply = tested_app.post('user/1', json={'strava_token': 'aaaaa'})
+    reply = tested_app.post('/users/1', json={'strava_token': 'aaaaa'})
     assert reply.status_code == 200
 
     user2 = new_user(email='paolo@rossi.it')
@@ -113,7 +113,7 @@ def test_set_token(client):
     assert tested_app.post('/users', json=json).status_code == 200
 
     # two person with same token
-    reply = tested_app.post('user/2', json={'strava_token': 'aaaaa'})
+    reply = tested_app.post('/users/2', json={'strava_token': 'aaaaa'})
     assert reply.status_code == 409
 
 
@@ -121,7 +121,7 @@ def test_delete_user(client):
     tested_app, app = client
 
     # user 1 not existing
-    reply = tested_app.delete('user/1')
+    reply = tested_app.delete('/users/1')
     assert reply.status_code == 404
 
     user1 = new_user()
@@ -131,6 +131,6 @@ def test_delete_user(client):
     assert tested_app.post('/users', json=json).status_code == 200
 
     # deleting correctly
-    reply = tested_app.delete('user/1')
+    reply = tested_app.delete('/users/1')
     assert reply.status_code == 200
 
