@@ -44,7 +44,6 @@ def test_add_run(client):
             assert run_one.elapsed_time == 5000.0
             assert run_one.total_elevation_gain == 3.0
             assert run_one.average_heartrate is None
-            assert run_one.start_date == datetime(2017, 7, 14, 4, 40)
 
             runs = {
 
@@ -91,7 +90,6 @@ def test_add_run(client):
             assert run_two.elapsed_time == 4000.0
             assert run_two.total_elevation_gain == 2.0
             assert run_two.average_heartrate is None
-            assert run_two.start_date == datetime(2004, 11, 9, 12, 33, 20)
 
 
 def test_get_runs(client):
