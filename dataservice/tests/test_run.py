@@ -1,5 +1,4 @@
 from dataservice.tests.utility import client, new_user, new_user_two, new_run
-from flaskapp.tests.utility import login
 from dataservice.database import db, Run
 from datetime import datetime
 import json

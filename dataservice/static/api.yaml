@@ -15,8 +15,6 @@ tags:
     description: Operations about user
   - name: run
     description: Operations about run
-  - name: objective
-    description: Operations about objective
   - name: challenge
     description: Operations about challenge
 paths:
@@ -258,100 +256,6 @@ paths:
           description: The run does not belong to the user
         '404':
           description: The run id does not exists
-  /objectives:
-    get:
-      tags:
-        - objective
-      summary: Get objectives of user id
-      operationId: getObjectives
-      description: This can only be done by user id
-      parameters:
-        - name: user_id
-          in: query
-          description: The user id
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: List of objective objects
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Objective'
-        '400':
-          description: Bad Request
-        '404':
-          description: There are no objectives for the user id
-    post:
-      tags:
-        - objective
-      summary: Create objective for the user id
-      operationId: createObjective
-      description: This can only be done by connected user id
-      parameters:
-        - name: user_id
-          in: query
-          description: The user id
-          required: true
-          type: integer
-        - name: name
-          in: query
-          description: name of the objective
-          required: true
-          type: string
-        - name: target_distance
-          in: query
-          description: target distance of the objective
-          required: true
-          type: number
-        - name: start_date
-          in: query
-          description: start date of the objective
-          required: true
-          type: string
-          format: date-time
-        - name: end_date
-          in: query
-          description: end date of the objective
-          required: true
-          type: string
-          format: date-time
-        - name: runner_id
-          in: query
-          description: user id
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: objective object
-          schema:
-            $ref: '#/definitions/Objective'
-        '400':
-          description: Bad Request
-  '/objectives/{objective_id}':
-    get:
-      tags:
-        - objective
-      summary: Get object id of the user id
-      operationId: getObjective
-      description: This can be done only by connected user id
-      parameters:
-        - name: objective_id
-          in: path
-          required: true
-          type: integer
-        - name: user_id
-          in: query
-          description: The user id
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: objective object
-          schema:
-            $ref: '#/definitions/Objective'
-        '400':
-          description: Bad Request
   /challenges:
     get:
       tags:
@@ -522,36 +426,6 @@ definitions:
       runner_id:
         type: integer
         description: The user ID of the runner
-  Objective:
-    type: object
-    required:
-      - id
-      - name
-      - target_distance
-      - start_date
-      - end_date
-      - runner_id
-    properties:
-      id:
-        type: integer
-        description: The Objective ID
-      name:
-        type: string
-        description: The Objective name
-      target_distance:
-        type: integer
-        description: The Objective target_distance
-      start_date:
-        type: string
-        format: date-time
-        description: The Objective starting date
-      end_date:
-        type: string
-        format: date-time
-        description: The Objective ending date
-      runner_id:
-        type: integer
-        description: The user id of the runner
   Challenge:
     type: object
     required:
