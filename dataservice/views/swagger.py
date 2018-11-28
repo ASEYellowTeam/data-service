@@ -127,7 +127,9 @@ def get_runs():
 
 @api.operation('getRun')
 def get_run(run_id):
-    run = db.session.query(Run).filter(Run.id == run_id)
+    run = db.session.query(Run).filter(Run.id == run_id).first()
+    if not run:
+        abort(404)
     return run.to_json()
 
 
