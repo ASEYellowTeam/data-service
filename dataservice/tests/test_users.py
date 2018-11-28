@@ -71,13 +71,13 @@ def test_get_user(client):
     user_json = user1.to_json()
 
     # getting non existing user
-    reply = tested_app.get('/user/1')
+    reply = tested_app.get('/users/1')
     assert reply.status_code == 404
 
     # inserting 'mario@rossi.it', the only one in DB -> id=1
     assert tested_app.post('/users', json=user_json).status_code == 200
 
-    reply = tested_app.get('user/1')
+    reply = tested_app.get('users/1')
     users_json = json.loads(str(reply.data, 'utf8'))
 
     assert str(users_json) == "{'age': 23, 'email': 'mario@rossi.it', 'firstname': 'mario', 'id': 1, 'lastname': " \

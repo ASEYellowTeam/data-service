@@ -94,7 +94,7 @@ paths:
           description: Bad request
         '409':
           description: The user already exists
-  '/user/{user_id}':
+  '/users/{user_id}':
     get:
       tags:
         - user
