@@ -164,7 +164,7 @@ paths:
     get:
       tags:
         - run
-      summary: Get runs of all the users
+      summary: Get runs of the user_id
       operationId: getRuns
       description: This can be done only by the data-pump and mail-pump
       parameters:
@@ -232,11 +232,9 @@ paths:
           type: integer
       responses:
         '200':
-          description: List of run object
+          description: number of the runs added
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Run'
+            type: integer
         '400':
           description: Bad request
   '/runs/{run_id}':

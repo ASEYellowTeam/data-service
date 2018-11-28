@@ -1,8 +1,10 @@
 import pytest
 import os
 import tempfile
+from random import uniform, randint
+from datetime import datetime
 from dataservice.app import create_app
-from dataservice.database import db, User
+from dataservice.database import db, User, Run
 
 
 @pytest.fixture
@@ -40,3 +42,33 @@ def new_user(email=None):
     user.max_hr = 120
     user.vo2max = 0
     return user
+
+def new_user_two():
+    user = User()
+    user.email = 'carlo@franchi.it'
+    user.firstname = 'carlo'
+    user.lastname = 'franchi'
+    user.age = 30
+    user.weight = 80
+    user.rest_hr = 60
+    user.max_hr = 120
+    user.vo2max = 0
+    return user
+
+def new_run(user, strava_id=randint(100, 100000000), name=None, distance=uniform(50.0, 10000.0), elapsed_time=uniform(30.0, 3600.0),
+            average_heartrate=None, total_elevation_gain=uniform(0.0, 25.0), start_date=datetime.now()):
+    if name is None :
+        name = "Run %s" % strava_id
+
+    run = Run()
+    run.runner = user
+    run.strava_id = strava_id  # a random number 100 - 1.000.000, we hope is unique
+    run.name = name
+    run.distance = distance  # 50m - 10 km
+    run.elapsed_time = elapsed_time  # 30s - 1h
+    run.average_speed = run.distance / run.elapsed_time
+    run.average_heartrate = average_heartrate
+    run.total_elevation_gain = total_elevation_gain  # 0m - 25m
+    run.start_date = start_date
+    db.session.add(run)
+    db.session.commit()

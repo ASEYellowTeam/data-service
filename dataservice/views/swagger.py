@@ -121,15 +121,15 @@ def add_runs():
 
     if added > 0:
         db.session.commit()
-    print(db_run)
     return {'added': added}
 
 
 @api.operation('getRuns')
 def get_runs():
     user_id = request.args.get('user_id')
-    if not user_id:
-        abort(400)
+    user = db.session.query(User).filter(User.id == user_id).first()
+    if not user:
+        abort(404)
     runs = db.session.query(Run).filter(Run.runner_id == user_id)
     return jsonify([run.to_json() for run in runs])
 
