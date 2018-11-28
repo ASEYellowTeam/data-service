@@ -95,6 +95,12 @@ def add_runs():
     for user, runs in request.json.items():
         runner_id = int(user)
         for run in runs:
+
+            run_old = db.session.query(Run).filter(Run.strava_id == run['strava_id']).first()
+
+            if run_old is not None:
+                continue
+
             db_run = Run()
             db_run.strava_id = run['strava_id']
             db_run.distance = run['distance']
@@ -112,7 +118,7 @@ def add_runs():
 
     if added > 0:
         db.session.commit()
-
+    print(db_run)
     return {'added': added}
 
 

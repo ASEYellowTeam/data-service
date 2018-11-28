@@ -29,9 +29,9 @@ def client():
     os.unlink(app.config['DATABASE'])
 
 
-def new_user():
+def new_user(email=None):
     user = User()
-    user.email = 'mario@rossi.it'
+    user.email = email if email is not None else 'mario@rossi.it'
     user.firstname = 'mario'
     user.lastname = 'rossi'
     user.age = 23
