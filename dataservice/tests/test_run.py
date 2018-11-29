@@ -124,8 +124,10 @@ def test_get_runs(client):
 
         # Get runs of an not existing user
         reply_one = tested_app.get('/runs?user_id=5')
-        assert reply_one.status_code == 404
+        assert reply_one.status_code == 400
 
+        reply_two = tested_app.get('/runs')
+        assert reply_two.status_code == 400
 
 def test_get_run(client):
 
