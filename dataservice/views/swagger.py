@@ -3,10 +3,15 @@ from datetime import datetime
 from flakon import SwaggerBlueprint
 from flask import request, jsonify, abort, make_response
 from dataservice.database import db, User, Run
+import requests
 
 HERE = os.path.dirname(__file__)
 YML = os.path.join(HERE, '..', 'static', 'api.yaml')
 api = SwaggerBlueprint('API', __name__, swagger_spec=YML)
+
+OBJECTIVESERVICE = os.environ['OBJECTIVE_SERVICE']
+MAILSERVICE = os.environ['MAIL_SERVICE']
+CHALLENGESERVICE = os.environ['CHALLENGE_SERVICE']
 
 
 @api.operation('getUsers')
@@ -65,7 +70,6 @@ def set_token(user_id):
         abort(400)
     strava_token = strava_token['strava_token']
 
-
     existing = db.session.query(User).filter(User.strava_token == strava_token).first()
     if existing:
         abort(409)
@@ -89,6 +93,18 @@ def delete_user(user_id):
 
     db.session.delete(user)
     db.session.commit()
+
+    requests.delete(OBJECTIVESERVICE + '/objectives?user_id='+str(user_id))
+
+    requests.delete(CHALLENGESERVICE + '/challenges?user_id=' + str(user_id))
+
+    requests.delete(MAILSERVICE + '/reports?user_id=' + str(user_id))
+
+    runs = db.session.query(Run.runner_id == user_id)
+
+    for run in runs:
+        db.session.delete(run)
+
     return make_response('ok')
 
 
@@ -140,26 +156,3 @@ def get_run(run_id):
     if not run:
         abort(404)
     return run.to_json()
-
-
-@api.operation('deleteRuns')
-def delete_runs():
-    user_id = request.args.get('user_id')
-    user = db.session.query(User).filter(User.id == user_id).first()
-    if not user:
-        abort(404)
-
-    runs = db.session.query(Run).filter(Run.runner_id == user_id).all()
-    for run in runs:
-        delete_run(run.id)
-    return make_response('deleted runs')
-
-
-@api.operation('deleteRun')
-def delete_run(run_id):
-    run = db.session.query(Run).filter(Run.id == run_id).first()
-    if not run:
-        abort(404)
-    db.session.delete(run)
-    db.session.commit()
-    return make_response('deleted')

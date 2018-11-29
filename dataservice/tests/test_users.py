@@ -1,6 +1,12 @@
 from dataservice.tests.utility import client, new_user
 from dataservice.database import db, User
 import json
+import requests_mock
+import os
+
+OBJECTIVESERVICE = os.environ['OBJECTIVE_SERVICE']
+MAILSERVICE = os.environ['MAIL_SERVICE']
+CHALLENGESERVICE = os.environ['CHALLENGE_SERVICE']
 
 
 def test_add_user(client):
@@ -131,6 +137,10 @@ def test_delete_user(client):
     assert tested_app.post('/users', json=json).status_code == 200
 
     # deleting correctly
-    reply = tested_app.delete('/users/1')
-    assert reply.status_code == 200
+    with requests_mock.mock() as m:
+        m.delete(OBJECTIVESERVICE + '/objectives?user_id='+str(1))
+        m.delete(CHALLENGESERVICE + '/challenges?user_id='+str(1))
+        m.delete(MAILSERVICE + '/reports?user_id='+str(1))
+        reply = tested_app.delete('/users/1')
+        assert reply.status_code == 200
 
