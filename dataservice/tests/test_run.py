@@ -26,12 +26,15 @@ def test_add_run(client):
                 "start_date": 1500000000.0,}]
         }
 
+        # Test for adding a single run
         reply = tested_app.post('/runs',json=runs)
         assert reply.status_code == 200
 
+        # Checking value of return
         run_json = json.loads(str(reply.data, 'utf8'))
         assert str(run_json) == "{'added': 1}"
 
+        # Check that the run is added in the database
         with app.app_context():
             run_one = db.session.query(Run).filter(Run.id == 1).first()
             assert run_one is not None
@@ -75,12 +78,15 @@ def test_add_run(client):
             }
 
 
-
+            # Test: Add the second run, the first is already added
             reply_one = tested_app.post('/runs', json=runs)
             assert tested_app.post('/runs', json=runs).status_code == 200
+
+            # Check the value in the response
             run_json = json.loads(str(reply_one.data, 'utf8'))
             assert str(run_json) == "{'added': 1}"
 
+            # Check the insertion of the second run in the database
             run_two = db.session.query(Run).filter(Run.id == 2).first()
             assert run_two is not None
             assert run_two.id == 2
@@ -93,8 +99,11 @@ def test_add_run(client):
             assert run_two.total_elevation_gain == 2.0
             assert run_two.average_heartrate is None
 
+            # Test when all the runs are already added
             reply_two = tested_app.post('/runs', json=runs)
             assert tested_app.post('/runs', json=runs).status_code == 200
+
+            # Check that the value is zero for runs added
             run_json = json.loads(str(reply_two.data, 'utf8'))
             assert str(run_json) == "{'added': 0}"
 
@@ -102,17 +111,12 @@ def test_get_runs(client):
     tested_app, app = client
 
     with app.app_context():
+
+        # I create a first user with three runs
         user_one = new_user()
         new_run(user_one)
         new_run(user_one)
         new_run(user_one)
-
-        user_two = new_user()
-        new_run(user_two)
-        new_run(user_two)
-
-        user_three = new_user()
-        new_run(user_three)
 
         # Get runs of an existing user
         reply = tested_app.get('/runs?user_id='+repr(user_one.id))
@@ -131,10 +135,10 @@ def test_get_run(client):
         user = new_user()
         new_run(user)
 
-        # Check before logging when the run doesn't exists
+        # Check of getting a not existing run
         assert tested_app.get('/runs/40').status_code == 404
 
-        # Check before logging when the run exists
+        # Check of getting an existing run
         assert tested_app.get('/runs/1').status_code == 200
 
 
@@ -142,12 +146,18 @@ def test_delete_single_run(client):
     tested_app, app = client
 
     with app.app_context():
+        # I create a user with a single run
         user = new_user()
         new_run(user)
 
+        # Check that the run is present before the call of the delete
         assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 1
         assert tested_app.delete('/runs/1').status_code == 200
 
+        # Check that the run is not present after the call of the delete
+        assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 0
+
+        # Call for a delete a not existing run
         assert tested_app.delete('/runs/4').status_code == 404
 
 
@@ -155,16 +165,21 @@ def test_delete_all_runs(client):
     tested_app, app = client
 
     with app.app_context():
+
+        # Creation of a user with three runs
         user = new_user()
         new_run(user)
         new_run(user)
         new_run(user)
 
-
+        # Check the number of the runs before the deletion
         assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 3
 
         # Check the deletion of the runs
         assert tested_app.delete('/runs?user_id='+repr(user.id)).status_code == 200
+
+        # Check the number of the runs after the deletion
         assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 0
 
+        # Check for the call of the delete with a not existing user
         assert tested_app.delete('/runs?user_id=8').status_code == 404
