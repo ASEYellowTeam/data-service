@@ -75,8 +75,10 @@ def test_add_run(client):
             }
 
 
+
+            reply_one = tested_app.post('/runs', json=runs)
             assert tested_app.post('/runs', json=runs).status_code == 200
-            run_json = json.loads(str(reply.data, 'utf8'))
+            run_json = json.loads(str(reply_one.data, 'utf8'))
             assert str(run_json) == "{'added': 1}"
 
             run_two = db.session.query(Run).filter(Run.id == 2).first()
@@ -91,6 +93,10 @@ def test_add_run(client):
             assert run_two.total_elevation_gain == 2.0
             assert run_two.average_heartrate is None
 
+            reply_two = tested_app.post('/runs', json=runs)
+            assert tested_app.post('/runs', json=runs).status_code == 200
+            run_json = json.loads(str(reply_two.data, 'utf8'))
+            assert str(run_json) == "{'added': 0}"
 
 def test_get_runs(client):
     tested_app, app = client
@@ -131,3 +137,34 @@ def test_get_run(client):
         # Check before logging when the run exists
         assert tested_app.get('/runs/1').status_code == 200
 
+
+def test_delete_single_run(client):
+    tested_app, app = client
+
+    with app.app_context():
+        user = new_user()
+        new_run(user)
+
+        assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 1
+        assert tested_app.delete('/runs/1').status_code == 200
+
+        assert tested_app.delete('/runs/4').status_code == 404
+
+
+def test_delete_all_runs(client):
+    tested_app, app = client
+
+    with app.app_context():
+        user = new_user()
+        new_run(user)
+        new_run(user)
+        new_run(user)
+
+
+        assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 3
+
+        # Check the deletion of the runs
+        assert tested_app.delete('/runs?user_id='+repr(user.id)).status_code == 200
+        assert db.session.query(Run).filter(Run.runner_id == user.id).count() == 0
+
+        assert tested_app.delete('/runs?user_id=8').status_code == 404

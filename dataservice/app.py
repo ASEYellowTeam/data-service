@@ -26,8 +26,8 @@ def create_app():
 
 
 def main():
-    app = create_app()
-    app.run(host="0.0.0.0",port=5002,debug=True)
+    app = create_app()                              # pragma: no cover
+    app.run(host="0.0.0.0",port=5002,debug=True)    # pragma: no cover
 
 
 if __name__ == '__main__':

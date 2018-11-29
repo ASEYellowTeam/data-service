@@ -233,6 +233,21 @@ paths:
             type: integer
         '400':
           description: Bad request
+    delete:
+      tags:
+        - run
+      summary: Delete all run of a specific user id
+      operationId: deleteRuns
+      description: This can be done only by all connected user
+      parameters:
+        - name: user_id
+          in: query
+          description: The user id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: deletion of the runs of user id
   '/runs/{run_id}':
     get:
       tags:
@@ -254,6 +269,22 @@ paths:
           description: The run does not belong to the user
         '404':
           description: The run id does not exists
+    delete:
+      tags:
+        - run
+      summary: Delete a single run
+      operationId: deleteRun
+      description: this can be done by all connected user
+      parameters:
+        - name: run_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: The run is deleted
+        '404':
+          description: The run does not exists
 definitions:
   User:
     type: object

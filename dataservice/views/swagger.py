@@ -15,10 +15,10 @@ def get_users():
     page = 0
     page_size = 0
     if page_size:
-        users = users.limit(page_size)
+        users = users.limit(page_size)  # pragma: no cover
     if page != 0:
         # TODO: review this pagination
-        users = users.offset(page * page_size)
+        users = users.offset(page * page_size) # pragma: no cover
     return jsonify([user.to_json() for user in users])
 
 
@@ -140,3 +140,26 @@ def get_run(run_id):
     if not run:
         abort(404)
     return run.to_json()
+
+
+@api.operation('deleteRuns')
+def delete_runs():
+    user_id = request.args.get('user_id')
+    user = db.session.query(User).filter(User.id == user_id).first()
+    if not user:
+        abort(404)
+
+    runs = db.session.query(Run).filter(Run.runner_id == user_id).all()
+    for run in runs:
+        delete_run(run.id)
+    return make_response('deleted runs')
+
+
+@api.operation('deleteRun')
+def delete_run(run_id):
+    run = db.session.query(Run).filter(Run.id == run_id).first()
+    if not run:
+        abort(404)
+    db.session.delete(run)
+    db.session.commit()
+    return make_response('deleted')

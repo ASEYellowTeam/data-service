@@ -31,7 +31,7 @@ class User(db.Model):
         return res
 
     def get_id(self):
-        return self.id
+        return self.id      # pragma: no cover
 
 
 class Run(db.Model):
