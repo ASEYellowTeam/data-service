@@ -15,8 +15,6 @@ tags:
     description: Operations about user
   - name: run
     description: Operations about run
-  - name: challenge
-    description: Operations about challenge
 paths:
   /users:
     get:
@@ -256,88 +254,6 @@ paths:
           description: The run does not belong to the user
         '404':
           description: The run id does not exists
-  /challenges:
-    get:
-      tags:
-        - challenge
-      summary: Get all the challenges of the user id
-      operationId: getChallenges
-      description: This can be done only by connected user id
-      parameters:
-        - name: user_id
-          in: query
-          description: The user id
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: List of challenge objects
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Challenge'
-        '400':
-          description: Bad Request
-    post:
-      tags:
-        - challenge
-      summary: Create a challenge for a user id
-      operationId: createChallenge
-      description: This can be done only by connected user id
-      parameters:
-        - name: run_one
-          in: query
-          description: id of the first run
-          required: true
-          type: integer
-        - name: name_run_one
-          in: query
-          description: name of the first run
-          required: true
-          type: number
-        - name: run_two
-          in: query
-          description: id of the second run
-          required: true
-          type: integer
-        - name: name_run_two
-          in: query
-          description: name of the second run
-          required: true
-          type: string
-        - name: id_user
-          in: query
-          description: user id
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: challenge object
-          schema:
-            $ref: '#/definitions/Challenge'
-        '400':
-          description: Bad Request
-  '/challenges/{challenge_id}':
-    get:
-      tags:
-        - challenge
-      summary: Get challenge id
-      operationId: getChallenge
-      description: This can be done by connected user
-      parameters:
-        - name: challenge_id
-          in: path
-          required: true
-          type: integer
-      responses:
-        '200':
-          description: challenge object
-          schema:
-            $ref: '#/definitions/Challenge'
-        '400':
-          description: The challenge belongs to another user
-        '404':
-          description: The challenge doesn't exists
 definitions:
   User:
     type: object
@@ -426,30 +342,4 @@ definitions:
       runner_id:
         type: integer
         description: The user ID of the runner
-  Challenge:
-    type: object
-    required:
-      - id
-      - run_one
-      - name_run_one
-      - run_two
-      - name_run_two
-    properties:
-      id:
-        type: integer
-        description: The Challenge ID
-      run_one:
-        type: integer
-        description: The first run ID
-      name_run_one:
-        type: string
-        description: The first run name
-      run_two:
-        type: integer
-        description: The second run ID
-      name_run_two:
-        type: string
-        description: The second run name
-      user_id:
-        type: integer
-        description: The user id
+        
